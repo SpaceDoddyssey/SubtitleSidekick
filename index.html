@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Text Settings Prototype</title>
+  <link rel="stylesheet" href="src/style.css">
+</head>
+<body>
+  <div id="MainLabel">Sample Text</div>
+
+  <details id="menu" open>
+  <summary>Settings</summary>
+  <div id="controls">
+    <div id="tabs">
+      <button class="tab active" data-tab="text">Text</button>
+      <button class="tab" data-tab="background">Background</button>
+      <button class="tab" data-tab="media">Media</button>
+      <button class="tab" data-tab="themes">Themes</button>
+    </div>
+
+    <br>
+
+    <div class="tab-content" id="tab-text">
+      <label>
+        Sample Text
+        <input id="textInput" type="text" value="Sample Text" />
+      </label><br>
+
+      <label>
+        Font Size
+        <div class="inline-control">
+          <input id="sizeInput" type="range" min="12" max="96" value="48" style="flex:1;" />
+          <input id="sizeBox" type="number" min="12" max="999" value="48" style="width:60px;" />
+        </div>
+      </label><br>
+
+      <label>
+      Font
+      </label>
+      <select id="fontSelect"></select>
+
+      <input type="file" id="fontUpload" accept=".ttf,.otf" />
+      <button id="applyFont">Apply</button>
+      <div id="textPreview" contenteditable="true">
+        Font Sample
+      </div><br>
+
+      <label>
+        Text Color
+        <input id="textColorInput" type="color" value="#ffffff" />
+      </label><br>
+
+      <label>
+        Font Weight
+        <div class="inline-control">
+          <select id="weightInput" style="flex:1;">
+            <!-- <option value="300">Light</option> -->
+            <option value="400" selected>Normal</option>
+            <option value="700">Bold</option>
+          </select>
+          <input id="weightBox" type="number" min="100" max="900" step="100" value="400" style="width:60px;" />
+        </div>
+      </label>
+    </div>
+
+    <div class="tab-content" id="tab-background" style="display:none;">
+      <label>
+        Background Color
+        <input id="bgColorInput" type="color" value="#1e1e1e" />
+      </label>
+    </div>
+    <div class="tab-content" id="tab-media" style="display:none;">
+      <label>
+        VLC password
+        <input id="vlcPass" type="password">
+        <span id="vlcStatus">Disconnected</span>
+      </label><br>
+      <label>
+        SRT File
+        <input id="SRTfileInput" type="file" accept=".srt">
+      </label><br>
+      <label>
+        Playback
+        <div class="inline-control">
+          <button id="playBtn">Play</button>
+          <button id="pauseBtn">Pause</button>
+          <button id="resetBtn">Reset</button>
+        </div>
+        <span id="timeStamp">00:00:00</span>
+      </label>
+    </div>
+    <div class="tab-content" id="tab-themes" style="display:none;">
+      
+    </div>
+    </div>
+  </details>
+
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>

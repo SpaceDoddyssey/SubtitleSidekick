@@ -1,6 +1,8 @@
 export class VLCSync {
-    constructor(password, onTimeUpdate, onStatus) {
+    constructor(password, port, onTimeUpdate, onStatus) {
         this.password = password;
+        this.port = port || 8080;
+
         this.onTimeUpdate = onTimeUpdate;
         this.onStatus = onStatus;
 
@@ -43,7 +45,7 @@ export class VLCSync {
         try {
             const auth = btoa(`:${this.password || ""}`);
 
-            const response = await fetch('http://localhost:8080/requests/status.json', {
+            const response = await fetch(`http://localhost:${this.port}/requests/status.json`, {
                 headers: {
                     Authorization: `Basic ${auth}`
                 }

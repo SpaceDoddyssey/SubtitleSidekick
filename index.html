@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Text Settings Prototype</title>
+  <title>Second Screen Subtitles</title>
   <link rel="stylesheet" href="src/style.css">
 </head>
 <body>
@@ -19,39 +19,37 @@
       <button class="tab" data-tab="themes">Themes</button>
     </div>
 
-    <br>
-
+  <!-- MARK: Text -->
     <div class="tab-content" id="tab-text">
-      <label>
+      <div class="setting">
         Sample Text
         <input id="textInput" type="text" value="Sample Text" />
-      </label><br>
+      </div>
 
-      <label>
+      <div class="setting">
         Font Size
         <div class="inline-control">
           <input id="sizeInput" type="range" min="12" max="96" value="48" style="flex:1;" />
           <input id="sizeBox" type="number" min="12" max="999" value="48" style="width:60px;" />
         </div>
-      </label><br>
+      </div>
 
-      <label>
-      Font
-      </label>
-      <select id="fontSelect"></select>
+      <div class="setting">
+        Font
+        <select id="fontSelect"></select>
+        <input type="file" id="fontUpload" accept=".ttf,.otf" />
+        <button id="applyFont">Apply</button>
+        <div id="textPreview" contenteditable="true">
+          Font Sample
+        </div>
+      </div>
 
-      <input type="file" id="fontUpload" accept=".ttf,.otf" />
-      <button id="applyFont">Apply</button>
-      <div id="textPreview" contenteditable="true">
-        Font Sample
-      </div><br>
-
-      <label>
+      <div class="setting">
         Text Color
         <input id="textColorInput" type="color" value="#ffffff" />
-      </label><br>
+      </div>
 
-      <label>
+      <div class="setting">
         Font Weight
         <div class="inline-control">
           <select id="weightInput" style="flex:1;">
@@ -61,25 +59,31 @@
           </select>
           <input id="weightBox" type="number" min="100" max="900" step="100" value="400" style="width:60px;" />
         </div>
-      </label>
+      </div>
     </div>
 
+  <!-- MARK: Background -->
     <div class="tab-content" id="tab-background" style="display:none;">
-      <label>
+      <div class="setting">
         Background Color
         <input id="bgColorInput" type="color" value="#1e1e1e" />
-      </label>
+      </div>
     </div>
+
+  <!-- MARK: Media -->
     <div class="tab-content" id="tab-media" style="display:none;">
-      <label>
-        VLC password
+      <!-- <div class="setting">
+        VLC password/port
         <input id="vlcPass" type="password">
+        <input id="vlcPort" type="number" value="8080">
         <span id="vlcStatus">Disconnected</span>
-      </label><br>
-      <label>
+      </div> -->
+      
+      <div class="setting">
         SRT File
         <input id="SRTfileInput" type="file" accept=".srt">
-      </label><br>
+      </div>
+
       <label>
         Playback
         <div class="inline-control">
@@ -90,6 +94,8 @@
         <span id="timeStamp">00:00:00</span>
       </label>
     </div>
+
+    <!-- MARK: Themes -->
     <div class="tab-content" id="tab-themes" style="display:none;">
       
     </div>

@@ -13,6 +13,7 @@ const weightBox = document.getElementById('weightBox');
 const tabs = document.querySelectorAll('.tab');
 const tabContents = document.querySelectorAll('.tab-content');
 const vlcPass = document.getElementById('vlcPass');
+const vlcPort = document.getElementById('vlcPort');
 const vlcStatus = document.getElementById('vlcStatus');
 
 const playBtn = document.getElementById('playBtn');
@@ -112,6 +113,7 @@ function ensureVlcSync() {
     if (!vlcSync) {
         vlcSync = new VLCSync(
             vlcPass.value,
+            vlcPort.value,
             (time) => player.setTime(time),
             (status) => vlcStatus.textContent = status
         );
@@ -122,6 +124,7 @@ vlcPass.addEventListener('input', debounce(() => {
     ensureVlcSync();
 
     vlcSync.password = vlcPass.value;
+    vlcSync.port = vlcPort.value || 8080;
 
     if (vlcPass.value.trim().length === 0) {
         vlcSync.stop();
@@ -142,6 +145,7 @@ playBtn.addEventListener('click', () => {
         ensureVlcSync();
 
         vlcSync.password = vlcPass.value;
+        vlcSync.port = vlcPort.value || 8080;
         vlcSync.start();
     } else {
         player.play();
@@ -170,10 +174,13 @@ resetBtn.addEventListener('click', () => {
 
 //#region Font Presets
 const presetFonts = [
-  { name: "System", value: "system-ui" },
-  { name: "Arial", value: "Arial, sans-serif" },
-  { name: "Georgia", value: "Georgia, serif" },
-  { name: "Courier", value: "Courier New, monospace" }
+    { name: "System", value: "system-ui" },
+    { name: "Arial", value: "Arial, sans-serif" },
+    { name: "Georgia", value: "Georgia, serif" },
+    { name: "Courier", value: "Courier New, monospace" },
+    { name: "Comic Sans", value: "'Comic Sans MS', cursive, sans-serif" },
+    { name: "Impact", value: "Impact, Charcoal, sans-serif" },
+    { name: "Verdana", value: "Verdana, Geneva, sans-serif" }
 ];
 
 const fontSelect = document.getElementById("fontSelect");

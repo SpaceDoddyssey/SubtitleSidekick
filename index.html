@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="src/style.css">
 </head>
 <body>
-  <div id="MainLabel">Sample Text</div>
+  <div id="MainLabel">Upload a .SRT file to get started</div>
 
   <details id="menu" open>
   <summary>Settings</summary>
@@ -23,7 +23,7 @@
     <div class="tab-content" id="tab-text">
       <div class="setting">
         Sample Text
-        <input id="textInput" type="text" value="Sample Text" />
+        <input id="textInput" type="text" value="" />
       </div>
 
       <div class="setting">
@@ -72,13 +72,6 @@
 
   <!-- MARK: Media -->
     <div class="tab-content" id="tab-media" style="display:none;">
-      <!-- <div class="setting">
-        VLC password/port
-        <input id="vlcPass" type="password">
-        <input id="vlcPort" type="number" value="8080">
-        <span id="vlcStatus">Disconnected</span>
-      </div> -->
-      
       <div class="setting">
         SRT File
         <input id="SRTfileInput" type="file" accept=".srt">

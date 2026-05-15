@@ -1,5 +1,4 @@
 import { SRTPlayer } from './SRTParser.js';
-import { VLCSync } from './VLCSync.js';
 
 //#region DOM Elements
 const mainLabel = document.getElementById('MainLabel');
@@ -12,9 +11,6 @@ const sizeBox = document.getElementById('sizeBox');
 const weightBox = document.getElementById('weightBox');
 const tabs = document.querySelectorAll('.tab');
 const tabContents = document.querySelectorAll('.tab-content');
-const vlcPass = document.getElementById('vlcPass');
-const vlcPort = document.getElementById('vlcPort');
-const vlcStatus = document.getElementById('vlcStatus');
 
 const playBtn = document.getElementById('playBtn');
 const pauseBtn = document.getElementById('pauseBtn');
@@ -83,14 +79,6 @@ srtFileInput.addEventListener('change', async () => {
 //#endregion
 
 //#region Helper Functions
-function debounce(fn, delay = 400) {
-    let t;
-    return (...args) => {
-        clearTimeout(t);
-        t = setTimeout(() => fn(...args), delay);
-    };
-}
-
 function formatTime(ms) {
     const totalSeconds = Math.floor(ms / 1000);
 
@@ -106,70 +94,10 @@ function formatTime(ms) {
 }
 //#endregion
 
-//#region VLC Sync
-let vlcSync = null;
-
-function ensureVlcSync() {
-    if (!vlcSync) {
-        vlcSync = new VLCSync(
-            vlcPass.value,
-            vlcPort.value,
-            (time) => player.setTime(time),
-            (status) => vlcStatus.textContent = status
-        );
-    }
-}
-
-vlcPass.addEventListener('input', debounce(() => {
-    ensureVlcSync();
-
-    vlcSync.password = vlcPass.value;
-    vlcSync.port = vlcPort.value || 8080;
-
-    if (vlcPass.value.trim().length === 0) {
-        vlcSync.stop();
-        vlcStatus.textContent = "Disconnected";
-        return;
-    }
-
-    vlcSync.setStatus("Connecting...");
-    vlcSync.start();
-}, 500));
-//#endregion
-
 //#region Playback Controls
-playBtn.addEventListener('click', () => {
-    const hasVlcPass = vlcPass.value.trim().length > 0;
-
-    if (hasVlcPass) {
-        ensureVlcSync();
-
-        vlcSync.password = vlcPass.value;
-        vlcSync.port = vlcPort.value || 8080;
-        vlcSync.start();
-    } else {
-        player.play();
-    }
-});
-
-
-
-function stopVlc() {
-    if (!vlcSync) return;
-
-    vlcSync.stop();
-    vlcStatus.textContent = "Paused";
-}
-
-pauseBtn.addEventListener('click', () => {
-    player.pause();
-    stopVlc();
-});
-
-resetBtn.addEventListener('click', () => {
-    player.reset();
-    stopVlc();
-});
+playBtn.addEventListener('click', () => player.play());
+pauseBtn.addEventListener('click', () => player.pause());
+resetBtn.addEventListener('click', () => player.reset());
 //#endregion
 
 //#region Font Presets

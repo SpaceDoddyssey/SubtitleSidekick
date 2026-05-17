@@ -191,14 +191,14 @@ function updateProgressBar(currentTime) {
     const progress = rangeSize > 0 ? ((currentTime - startTime) / rangeSize) * 100 : 0;
 
     if (modeChanged) {
-        // snap to 0 instantly
+        // snap to 0 or 100 instantly
         progressBar.classList.add('no-transition');
-        progressBar.style.setProperty('--progress', '0%');
+        progressBar.style.setProperty('--progress', progress + '%');
         void progressBar.offsetWidth;
         progressBar.classList.remove('no-transition');
+    } else {
+        progressBar.style.setProperty('--progress', progress + '%');
     }
-
-    progressBar.style.setProperty('--progress', `${Math.min(Math.max(progress, 0), 100)}%`);
 }
 //#endregion
 

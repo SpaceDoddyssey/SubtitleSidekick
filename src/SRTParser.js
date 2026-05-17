@@ -42,17 +42,19 @@ export class SRTPlayer {
         this.updateSubtitle();
     }
 
-    setTime(ms) {
-        this.currentTime = ms;
+    setTime(timeMs) {
+        this.currentTime = Math.max(0, Math.min(timeMs, this.getDuration()));
+
+        this.currentIndex = this.subtitles.findIndex(s => s.end >= this.currentTime);
+        if (this.currentIndex === -1) {
+            this.currentIndex = this.subtitles.length;
+        }
+
         this.updateSubtitle();
     }
 
     scrub(deltaMs) {
-        this.currentTime += deltaMs;
-
-        this.currentTime = Math.max(0, Math.min(this.currentTime, this.getDuration()));
-
-        this.updateSubtitle();
+        this.setTime(this.currentTime + deltaMs);
     }
 
     pause() {
@@ -74,12 +76,25 @@ export class SRTPlayer {
     }
 
     updateSubtitle() {
-        const subtitle = this.subtitles.find(s =>
-            this.currentTime >= s.start &&
-            this.currentTime <= s.end
-        );
+        if (this.subtitles.length === 0) return;
 
-        this.onSubtitleChange(subtitle?.text ?? "");
+        
+        while (this.currentIndex < this.subtitles.length &&
+            this.currentTime > this.subtitles[this.currentIndex].end) 
+        {
+            this.currentIndex++;
+        }
+
+        const subtitle = this.subtitles[this.currentIndex];
+
+        if (subtitle &&
+            this.currentTime >= subtitle.start &&
+            this.currentTime <= subtitle.end) 
+        {
+            this.onSubtitleChange(subtitle.text);
+        } else {
+            this.onSubtitleChange("");
+        }
 
         if (this.onTimeUpdate) {
             this.onTimeUpdate(this.currentTime);

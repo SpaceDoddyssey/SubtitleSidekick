@@ -17,6 +17,90 @@ const playBtn = document.getElementById('playBtn');
 const pauseBtn = document.getElementById('pauseBtn');
 const resetBtn = document.getElementById('resetBtn');
 const timeStamp = document.getElementById('timeStamp');
+
+const themeNameInput = document.getElementById('themeNameInput');
+const saveThemeBtn = document.getElementById('saveThemeBtn');
+const resetThemeBtn = document.getElementById('resetThemeBtn');
+//#endregion
+
+//#region Settings State
+const SETTINGS_KEY = 'SSS-settings';
+const THEMES_KEY = 'SSS-themes';
+
+let BaseSettings = null;
+const CurSettings = {};
+
+function initSettingsFromCSS() {
+    const mainStyle = getComputedStyle(mainLabel);
+    const bodyStyle = getComputedStyle(document.body);
+
+    const base = {
+        text: mainLabel.textContent,
+        fontSize: parseInt(mainStyle.fontSize),
+        textColor: rgbToHex(mainStyle.color),
+        bgColor: rgbToHex(bodyStyle.backgroundColor),
+        fontWeight: mainStyle.fontWeight,
+        fontFamily: mainStyle.fontFamily,
+        bgImage: null,
+        bgImageMode: 'stretch'
+    };
+
+    BaseSettings = structuredClone(base);
+
+    Object.assign(CurSettings, base);
+}
+
+function applySettings() {
+    mainLabel.textContent = CurSettings.text;
+    mainLabel.style.fontSize = `${CurSettings.fontSize}px`;
+    mainLabel.style.color = CurSettings.textColor;
+    mainLabel.style.fontWeight = CurSettings.fontWeight;
+    mainLabel.style.fontFamily = CurSettings.fontFamily;
+
+    document.body.style.backgroundColor = CurSettings.bgColor;
+
+    if (CurSettings.bgImage) {
+        document.body.style.backgroundImage = `url(${CurSettings.bgImage})`;
+    } else {
+        document.body.style.backgroundImage = 'none';
+    }
+
+    applyBackgroundMode();
+
+    // sync UI inputs
+    textInput.value = CurSettings.text;
+    sizeInput.value = CurSettings.fontSize;
+    sizeBox.value = CurSettings.fontSize;
+    colorInput.value = CurSettings.textColor;
+    bgColorInput.value = CurSettings.bgColor;
+    weightInput.value = CurSettings.fontWeight;
+    bgImageMode.value = CurSettings.bgImageMode;
+
+    if (fontSelect) {
+        fontSelect.value = CurSettings.fontFamily;
+        preview.style.fontFamily = CurSettings.fontFamily;
+    }
+}
+
+function saveSettings() {
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify(CurSettings));
+}
+
+function loadSettings() {
+    initSettingsFromCSS(); // populate defaults first
+
+    const saved = localStorage.getItem(SETTINGS_KEY);
+
+    if (saved) {
+        try {
+            Object.assign(CurSettings, JSON.parse(saved));
+        } catch (err) {
+            console.warn('Failed to load settings:', err);
+        }
+    }
+
+    applySettings();
+}
 //#endregion
 
 //#region Utility Functions
@@ -30,6 +114,16 @@ function bindSyncedInputs(inputA, inputB, apply) {
         inputA.value = inputB.value;
         apply(inputB.value);
     });
+}
+
+function rgbToHex(rgb) {
+    const values = rgb.match(/\d+/g);
+    if (!values) return '#000000';
+
+    return '#' + values
+        .slice(0, 3)
+        .map(v => Number(v).toString(16).padStart(2, '0'))
+        .join('');
 }
 //#endregion
 
@@ -96,11 +190,7 @@ function updateProgressBar(currentTime) {
         // snap to 0 instantly
         progressBar.classList.add('no-transition');
         progressBar.style.setProperty('--progress', '0%');
-
-        // force browser to apply that state
         void progressBar.offsetWidth;
-
-        // restore animation and continue filling
         progressBar.classList.remove('no-transition');
     }
 
@@ -118,14 +208,35 @@ tabs.forEach(tab => {
     });
 });
 
-
-textInput.addEventListener('input', () => mainLabel.textContent = textInput.value);
-bindSyncedInputs(sizeInput, sizeBox, value => {
-    mainLabel.style.fontSize = `${value}px`;
+textInput.addEventListener('input', () => {
+    CurSettings.text = textInput.value;
+    applySettings();
+    saveSettings();
 });
 
-colorInput.addEventListener('input', () => mainLabel.style.color = colorInput.value);
-bgColorInput.addEventListener('input', () => document.body.style.backgroundColor = bgColorInput.value );
+bindSyncedInputs(sizeInput, sizeBox, value => {
+    CurSettings.fontSize = Number(value);
+    applySettings();
+    saveSettings();
+});
+
+colorInput.addEventListener('input', () => {
+    CurSettings.textColor = colorInput.value;
+    applySettings();
+    saveSettings();
+});
+
+bgColorInput.addEventListener('input', () => {
+    CurSettings.bgColor = bgColorInput.value;
+    applySettings();
+    saveSettings();
+});
+
+weightInput.addEventListener('input', () => {
+    CurSettings.fontWeight = weightInput.value;
+    applySettings();
+    saveSettings();
+});
 
 const bgImageInput = document.getElementById('bgImageInput');
 const bgImageMode = document.getElementById('bgImageMode');
@@ -137,18 +248,23 @@ bgImageInput.addEventListener('change', (e) => {
 
     const reader = new FileReader();
     reader.onload = () => {
-        document.body.style.backgroundImage = `url(${reader.result})`;
-        applyBackgroundMode();
+        CurSettings.bgImage = reader.result;
+        applySettings();
+        saveSettings();
     };
     reader.readAsDataURL(file);
 });
 
-bgImageMode.addEventListener('change', applyBackgroundMode);
+bgImageMode.addEventListener('change', () => {
+    CurSettings.bgImageMode = bgImageMode.value;
+    applySettings();
+    saveSettings();
+});
 
 function applyBackgroundMode() {
-    const mode = bgImageMode.value;
+    const mode = CurSettings.bgImageMode;
 
-    if (!document.body.style.backgroundImage) return;
+    if (!CurSettings.bgImage) return;
 
     if (mode === 'tile') {
         document.body.style.backgroundRepeat = 'repeat';
@@ -162,7 +278,9 @@ function applyBackgroundMode() {
 }
 
 clearBgImage.addEventListener('click', () => {
-    document.body.style.backgroundImage = 'none';
+    CurSettings.bgImage = null;
+    applySettings();
+    saveSettings();
 });
 //#endregion
 
@@ -205,17 +323,17 @@ const forwardSlowBtn = document.getElementById('forwardSlow');
 const forwardFastBtn = document.getElementById('forwardFast');
 
 let scrubAmount = 0;
-rewindFastBtn.addEventListener ('pointerdown', () => scrubAmount = -50 );
-rewindSlowBtn.addEventListener ('pointerdown', () => scrubAmount = -10 );
-forwardSlowBtn.addEventListener('pointerdown', () => scrubAmount = 10 );
-forwardFastBtn.addEventListener('pointerdown', () => scrubAmount = 50 );
+rewindFastBtn.addEventListener('pointerdown', () => scrubAmount = -50);
+rewindSlowBtn.addEventListener('pointerdown', () => scrubAmount = -10);
+forwardSlowBtn.addEventListener('pointerdown', () => scrubAmount = 10);
+forwardFastBtn.addEventListener('pointerdown', () => scrubAmount = 50);
 document.addEventListener('pointerup', () => scrubAmount = 0);
 
 function animate() {
-  if(player.subtitles.length != 0) player.scrub(scrubAmount);
-  window.requestAnimationFrame(animate)
+    if (player.subtitles.length != 0) player.scrub(scrubAmount);
+    window.requestAnimationFrame(animate);
 }
-animate()
+animate();
 //#endregion
 
 //#region Font Presets
@@ -234,70 +352,157 @@ const preview = document.getElementById("textPreview");
 const applyBtn = document.getElementById("applyFont");
 
 function initFontPresets() {
-  presetFonts.forEach(font => {
-    const opt = document.createElement("option");
-    opt.value = font.value;
-    opt.textContent = font.name;
-    fontSelect.appendChild(opt);
-  });
+    presetFonts.forEach(font => {
+        const opt = document.createElement("option");
+        opt.value = font.value;
+        opt.textContent = font.name;
+        fontSelect.appendChild(opt);
+    });
 
-  fontSelect.addEventListener("change", () => {
-    preview.style.fontFamily = fontSelect.value;
-  });
+    fontSelect.addEventListener("change", () => {
+        preview.style.fontFamily = fontSelect.value;
+    });
 
-  applyBtn.addEventListener("click", () => {
-    mainLabel.style.fontFamily = fontSelect.value;
-  });
+    applyBtn.addEventListener("click", () => {
+        CurSettings.fontFamily = fontSelect.value;
+        applySettings();
+        saveSettings();
+    });
 
-  // default
-  preview.style.fontFamily = presetFonts[0].value;
+    preview.style.fontFamily = presetFonts[0].value;
 }
 initFontPresets();
 
 let customFontCounter = 0;
 
 document.getElementById("fontUpload").addEventListener("change", async (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
+    const file = e.target.files[0];
+    if (!file) return;
 
-  const fontName = `custom_font_${customFontCounter++}`;
+    const fontName = `custom_font_${customFontCounter++}`;
+    const arrayBuffer = await file.arrayBuffer();
+    const font = new FontFace(fontName, arrayBuffer);
 
-  const arrayBuffer = await file.arrayBuffer();
+    try {
+        await font.load();
+        document.fonts.add(font);
 
-  const font = new FontFace(fontName, arrayBuffer);
+        const opt = document.createElement("option");
+        opt.value = fontName;
+        opt.textContent = file.name.replace(/\.(ttf|otf)$/i, "");
+        fontSelect.appendChild(opt);
 
-  try {
-    await font.load();
-    document.fonts.add(font);
+        fontSelect.value = fontName;
+        preview.style.fontFamily = fontName;
 
-    // add to dropdown
-    const opt = document.createElement("option");
-    opt.value = fontName;
-    opt.textContent = file.name.replace(/\.(ttf|otf)$/i, "");
-    fontSelect.appendChild(opt);
+    } catch (err) {
+        console.error("Font load failed:", err);
+    }
 
-    fontSelect.value = fontName;
-    preview.style.fontFamily = fontName;
-
-  } catch (err) {
-    console.error("Font load failed:", err);
-  }
-
-  // reset input so same file can be re-uploaded
-  e.target.value = "";
+    e.target.value = "";
 });
 //#endregion
 
+//#region Theme Presets
+function getThemes() {
+    try {
+        return JSON.parse(localStorage.getItem(THEMES_KEY)) || {};
+    } catch {
+        return {};
+    }
+}
+
+function saveThemes(themes) {
+    localStorage.setItem(THEMES_KEY, JSON.stringify(themes));
+}
+
+function exportCurrentTheme(name) {
+    const themes = getThemes();
+    themes[name] = structuredClone(CurSettings);
+    saveThemes(themes);
+    renderThemes();
+}
+
+function deleteTheme(name) {
+    const themes = getThemes();
+    delete themes[name];
+    saveThemes(themes);
+    renderThemes();
+}
+
+function loadTheme(name) {
+    const themes = getThemes();
+    if (!themes[name]) return;
+
+    Object.assign(CurSettings, themes[name]);
+    applySettings();
+    saveSettings();
+}
+
+function renderThemes() {
+    const container = document.getElementById('themeList');
+    const themes = getThemes();
+
+    container.innerHTML = '';
+
+    Object.keys(themes).forEach(name => {
+        const row = document.createElement('div');
+        row.className = 'theme-row';
+        row.style.display = 'flex';
+        row.style.justifyContent = 'space-between';
+        row.style.marginBottom = '8px';
+        row.style.alignItems = 'center';
+
+        const label = document.createElement('span');
+        label.textContent = name;
+
+        const loadBtn = document.createElement('button');
+        loadBtn.textContent = 'Load';
+        loadBtn.onclick = () => loadTheme(name);
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = 'Delete';
+        deleteBtn.onclick = () => deleteTheme(name);
+
+        const btnGroup = document.createElement('div');
+        btnGroup.style.display = 'flex';
+        btnGroup.style.gap = '6px';
+        btnGroup.append(loadBtn, deleteBtn);
+
+        row.append(label, btnGroup);
+        container.appendChild(row);
+    });
+}
+
+saveThemeBtn.addEventListener('click', () => {
+    const name = themeNameInput.value.trim();
+    if (!name) return;
+
+    exportCurrentTheme(name);
+    themeNameInput.value = '';
+});
+
+resetThemeBtn.addEventListener('click', () => {
+    if (!BaseSettings) return;
+
+    Object.assign(CurSettings, structuredClone(BaseSettings));
+
+    localStorage.removeItem(SETTINGS_KEY);
+
+    applySettings();
+    saveSettings();
+});
+//endregion
 
 //#region Keyboard Shortcuts
 document.addEventListener('keydown', (e) => {
     if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') return;
-
-    if (e.repeat) return; // prevents resetting repeatedly while held
+    if (e.repeat) return;
 
     if (e.key === 'h') {
         e.preventDefault();
-        menu.classList.toggle('hidden');
+        const visible = getComputedStyle(menu).display !== 'none';
+        menu.style.display = visible ? 'none' : 'block';
     }
 
     if (e.key === 'ArrowLeft') {
@@ -321,3 +526,7 @@ document.addEventListener('keyup', (e) => {
         scrubAmount = 0;
     }
 });
+//#endregion
+
+loadSettings();
+renderThemes();

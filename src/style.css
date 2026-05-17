@@ -105,3 +105,12 @@ input, select {
 .progress-bar.no-transition::after {
     transition: none;
 }
+
+.theme-row {
+    padding: 6px 0;
+    border-bottom: 1px solid #333;
+}
+
+.theme-row button {
+    padding: 4px 8px;
+}

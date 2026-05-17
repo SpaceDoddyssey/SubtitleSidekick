@@ -47,6 +47,14 @@ export class SRTPlayer {
         this.updateSubtitle();
     }
 
+    scrub(deltaMs) {
+        this.currentTime += deltaMs;
+
+        this.currentTime = Math.max(0, Math.min(this.currentTime, this.getDuration()));
+
+        this.updateSubtitle();
+    }
+
     pause() {
         this.isPlaying = false;
 

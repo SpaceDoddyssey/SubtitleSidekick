@@ -2,13 +2,14 @@ import { SRTPlayer } from './SRTParser.js';
 
 //#region DOM Elements
 const mainLabel = document.getElementById('MainLabel');
+
+const menu = document.getElementById('menu');
 const textInput = document.getElementById('textInput');
 const sizeInput = document.getElementById('sizeInput');
 const colorInput = document.getElementById('textColorInput');
 const bgColorInput = document.getElementById('bgColorInput');
 const weightInput = document.getElementById('weightInput');
 const sizeBox = document.getElementById('sizeBox');
-const weightBox = document.getElementById('weightBox');
 const tabs = document.querySelectorAll('.tab');
 const tabContents = document.querySelectorAll('.tab-content');
 
@@ -33,14 +34,78 @@ function bindSyncedInputs(inputA, inputB, apply) {
 //#endregion
 
 //#region SRT Player
+const progressBar = document.getElementById('progressBar');
+let lastWasBetween = null;
+
 const player = new SRTPlayer(
     (text) => {
         mainLabel.textContent = text;
     },
     (time) => {
         timeStamp.textContent = formatTime(time);
+        updateProgressBar(time);
     }
 );
+
+function updateProgressBar(currentTime) {
+    const duration = player.getDuration();
+    if (duration === 0) {
+        progressBar.style.setProperty('--progress', '0%');
+        return;
+    }
+
+    const currentSubtitle = player.subtitles.find(s =>
+        currentTime >= s.start && currentTime <= s.end
+    );
+
+    let startTime, endTime;
+    const isBetween = !currentSubtitle;
+
+    if (currentSubtitle) {
+        startTime = currentSubtitle.start;
+        endTime = currentSubtitle.end;
+        progressBar.classList.remove('between');
+    } else {
+        progressBar.classList.add('between');
+
+        const lastSubtitle = [...player.subtitles].reverse().find(s => s.end <= currentTime);
+        const nextSubtitle = player.subtitles.find(s => s.start >= currentTime);
+
+        if (lastSubtitle && nextSubtitle) {
+            startTime = lastSubtitle.end;
+            endTime = nextSubtitle.start;
+        } else if (nextSubtitle) {
+            startTime = 0;
+            endTime = nextSubtitle.start;
+        } else if (lastSubtitle) {
+            startTime = lastSubtitle.end;
+            endTime = duration;
+        } else {
+            progressBar.style.setProperty('--progress', '0%');
+            return;
+        }
+    }
+
+    const modeChanged = lastWasBetween !== null && lastWasBetween !== isBetween;
+    lastWasBetween = isBetween;
+
+    const rangeSize = endTime - startTime;
+    const progress = rangeSize > 0 ? ((currentTime - startTime) / rangeSize) * 100 : 0;
+
+    if (modeChanged) {
+        // snap to 0 instantly
+        progressBar.classList.add('no-transition');
+        progressBar.style.setProperty('--progress', '0%');
+
+        // force browser to apply that state
+        void progressBar.offsetWidth;
+
+        // restore animation and continue filling
+        progressBar.classList.remove('no-transition');
+    }
+
+    progressBar.style.setProperty('--progress', `${Math.min(Math.max(progress, 0), 100)}%`);
+}
 //#endregion
 
 //#region UI Event Handlers
@@ -61,9 +126,6 @@ bindSyncedInputs(sizeInput, sizeBox, value => {
 
 colorInput.addEventListener('input', () => mainLabel.style.color = colorInput.value);
 bgColorInput.addEventListener('input', () => document.body.style.backgroundColor = bgColorInput.value );
-bindSyncedInputs(weightInput, weightBox, value => {
-    mainLabel.style.fontWeight = value;
-});
 //#endregion
 
 //#region File Upload
@@ -98,6 +160,29 @@ function formatTime(ms) {
 playBtn.addEventListener('click', () => player.play());
 pauseBtn.addEventListener('click', () => player.pause());
 resetBtn.addEventListener('click', () => player.reset());
+
+const rewindFastBtn = document.getElementById('rewindFast');
+const rewindSlowBtn = document.getElementById('rewindSlow');
+const forwardSlowBtn = document.getElementById('forwardSlow');
+const forwardFastBtn = document.getElementById('forwardFast');
+
+let scrubAmount = 0;
+rewindFastBtn.addEventListener('touchstart', () => scrubAmount = -50 );
+rewindSlowBtn.addEventListener('touchstart', () => scrubAmount = -10 );
+forwardSlowBtn.addEventListener('touchstart', () => scrubAmount = 10 );
+forwardFastBtn.addEventListener('touchstart', () => scrubAmount = 50 );
+rewindFastBtn.addEventListener ('pointerdown', () => scrubAmount = -50 );
+rewindSlowBtn.addEventListener ('pointerdown', () => scrubAmount = -10 );
+forwardSlowBtn.addEventListener('pointerdown', () => scrubAmount = 10 );
+forwardFastBtn.addEventListener('pointerdown', () => scrubAmount = 50 );
+document.addEventListener('touchend', () => scrubAmount = 0);
+document.addEventListener('pointerup', () => scrubAmount = 0);
+
+function animate() {
+  if(player.subtitles.length != 0) player.scrub(scrubAmount);
+  window.requestAnimationFrame(animate)
+}
+animate()
 //#endregion
 
 //#region Font Presets
@@ -168,5 +253,38 @@ document.getElementById("fontUpload").addEventListener("change", async (e) => {
   // reset input so same file can be re-uploaded
   e.target.value = "";
 });
-
 //#endregion
+
+
+//#region Keyboard Shortcuts
+document.addEventListener('keydown', (e) => {
+    if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') return;
+
+    if (e.repeat) return; // prevents resetting repeatedly while held
+
+    if (e.key === 'h') {
+        e.preventDefault();
+        menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+    }
+
+    if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        scrubAmount = -10;
+    }
+
+    if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        scrubAmount = 10;
+    }
+
+    if (e.key === ' ') {
+        e.preventDefault();
+        player.toggle();
+    }
+});
+
+document.addEventListener('keyup', (e) => {
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+        scrubAmount = 0;
+    }
+});

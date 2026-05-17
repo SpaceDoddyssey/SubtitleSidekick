@@ -9,8 +9,8 @@
 <body>
   <div id="MainLabel">Upload a .SRT file to get started</div>
 
-  <details id="menu" open>
-  <summary>Settings</summary>
+  <details id="menu" closed>
+  <summary>Settings (H to Hide)</summary>
   <div id="controls">
     <div id="tabs">
       <button class="tab active" data-tab="text">Text</button>
@@ -57,7 +57,6 @@
             <option value="400" selected>Normal</option>
             <option value="700">Bold</option>
           </select>
-          <input id="weightBox" type="number" min="100" max="900" step="100" value="400" style="width:60px;" />
         </div>
       </div>
     </div>
@@ -77,7 +76,7 @@
         <input id="SRTfileInput" type="file" accept=".srt">
       </div>
 
-      <label>
+      <div class="setting">
         Playback
         <div class="inline-control">
           <button id="playBtn">Play</button>
@@ -85,13 +84,24 @@
           <button id="resetBtn">Reset</button>
         </div>
         <span id="timeStamp">00:00:00</span>
-      </label>
-    </div>
+      </div>
 
-    <!-- MARK: Themes -->
-    <div class="tab-content" id="tab-themes" style="display:none;">
+      <div class="setting">
+        Calibration
+        <div id="progressBar" class="progress-bar"></div>
+        
+        <div id="playback-controls">
+          <button id="rewindFast">&lt;&lt;</button>
+          <button id="rewindSlow">&lt;</button>
+          <button id="forwardSlow">&gt;</button>
+          <button id="forwardFast">&gt;&gt;</button>
+        </div>
+      </div>
       
-    </div>
+    <!-- MARK: Themes -->
+      <div class="tab-content" id="tab-themes" style="display:none;">
+      
+      </div>
     </div>
   </details>
 

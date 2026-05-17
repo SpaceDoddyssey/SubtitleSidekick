@@ -291,11 +291,12 @@ clearBgImage.addEventListener('click', () => {
 
 //#region File Upload
 const srtFileInput = document.getElementById('SRTfileInput');
+const fontFileInput = document.getElementById('fontFileInput');
 const fileUploadButton = document.getElementById('fileUploadButton');
+const fontFileUploadButton = document.getElementById('fontUploadButton')
 
-fileUploadButton.addEventListener('click', () => {
-    srtFileInput.click();
-});
+fileUploadButton.addEventListener('click', () => { srtFileInput.click(); });
+fontFileUploadButton.addEventListener('click', () => { fontFileInput.click(); });
 
 async function loadSubtitleFile(file) {
     if (!file || !file.name.toLowerCase().endsWith('.srt')) return;
@@ -425,7 +426,7 @@ initFontPresets();
 
 let customFontCounter = 0;
 
-document.getElementById("fontUpload").addEventListener("change", async (e) => {
+fontFileInput.addEventListener("change", async (e) => {
     const file = e.target.files[0];
     if (!file) return;
 

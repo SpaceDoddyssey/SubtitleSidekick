@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="src/style.css">
 </head>
 <body>
-  <div id="MainLabel">Upload a .SRT file in the menu!</div>
+  <div id="MainLabel">Upload a .SRT file to get started!</div>
 
   <details id="menu">
   <summary>Menu (H to Hide)</summary>
@@ -70,11 +70,12 @@
       <div class="setting">
         Font
         <select id="fontSelect"></select>
-        <input type="file" id="fontUpload" accept=".ttf,.otf" />
-        <button id="applyFont">Apply</button>
-        <div id="textPreview" contenteditable="true">
+        <button id="fontUploadButton" type="button">Upload .TTF/.OTF</button>
+        <input id="fontFileInput" type="file" accept=".ttf,.otf", hidden />
+        <div id="textPreview" class="font-preview" contenteditable="true">
           Font Sample
         </div>
+        <button id="applyFont">Apply</button>
       </div>
 
       <div class="setting">

@@ -105,6 +105,12 @@ input, select {
     width: 100%;
 }
 
+.font-preview {
+    text-align: center;
+    margin-top: 0.6rem;
+    margin-bottom: 0.3rem;
+}
+
 .progress-bar {
     --progress: 0%;
     --transition-time: 0.1s;

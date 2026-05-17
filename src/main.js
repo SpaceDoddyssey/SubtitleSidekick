@@ -50,8 +50,12 @@ function initSettingsFromCSS() {
     Object.assign(CurSettings, base);
 }
 
+function SetMainLabel(text) {
+    mainLabel.setHTML(text, { sanitize: true, allowedTags: ['b', 'i', 'u', 'br'] });
+}
+
 function applySettings() {
-    mainLabel.textContent = CurSettings.text;
+    SetMainLabel(CurSettings.text);
     mainLabel.style.fontSize = `${CurSettings.fontSize}px`;
     mainLabel.style.color = CurSettings.textColor;
     mainLabel.style.fontWeight = CurSettings.fontWeight;
@@ -133,7 +137,7 @@ let lastWasBetween = null;
 
 const player = new SRTPlayer(
     (text) => {
-        mainLabel.textContent = text;
+        SetMainLabel(text);
     },
     (time) => {
         timeStamp.textContent = formatTime(time);

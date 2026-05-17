@@ -10,6 +10,23 @@ body {
     overflow: hidden;
 }
 
+body.dragging::after {
+    content: "Drop .srt file here";
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    border: 3px dashed #ffffff88;
+    color: white;
+    font-size: 2rem;
+    font-family: sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    pointer-events: none;
+    backdrop-filter: blur(4px);
+}
+
 #MainLabel {
     text-align: center;
     font-size: 48px;
@@ -27,6 +44,16 @@ body {
     box-shadow: 0 4px 12px rgba(0,0,0,0.25);
     width: 300px;
     overflow: hidden;
+}
+
+#srtTitle {
+    font-size: small;
+    color: #888888;
+    display: block;
+    max-width: 100%;
+    overflow: wrap;
+
+    text-align: left;
 }
 
 .hidden {

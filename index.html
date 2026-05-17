@@ -19,13 +19,16 @@
       <button class="tab" data-tab="background">Background</button>
       <button class="tab" data-tab="themes">Themes</button>
     </div>
+  
   <!-- MARK: Media -->
     <div class="tab-content" id="tab-media">
       <div class="setting">
-        SRT File
-        <input id="SRTfileInput" type="file" accept=".srt">
+          SRT File<br>
+          <span id="srtTitle">(None currently loaded)</span>
+          <button id="fileUploadButton" type="button">Choose File</button>
+          <input id="SRTfileInput" type="file" accept=".srt" hidden>
       </div>
-
+      
       <div class="setting">
         Playback
         <div class="inline-control">
@@ -48,6 +51,7 @@
         </div>
       </div>
     </div>
+
   <!-- MARK: Text -->
     <div class="tab-content" id="tab-text" style="display:none;">
       <div class="setting">
@@ -131,6 +135,7 @@
       <button id="resetThemeBtn">Default</button>
 
     </div>
+
   </div>
   </details>
 

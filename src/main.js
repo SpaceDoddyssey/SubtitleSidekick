@@ -4,6 +4,7 @@ import { SRTPlayer } from './SRTParser.js';
 const mainLabel = document.getElementById('MainLabel');
 
 const menu = document.getElementById('menu');
+const srtTitle = document.getElementById('srtTitle');
 const textInput = document.getElementById('textInput');
 const sizeInput = document.getElementById('sizeInput');
 const colorInput = document.getElementById('textColorInput');
@@ -290,13 +291,58 @@ clearBgImage.addEventListener('click', () => {
 
 //#region File Upload
 const srtFileInput = document.getElementById('SRTfileInput');
+const fileUploadButton = document.getElementById('fileUploadButton');
 
-srtFileInput.addEventListener('change', async () => {
-    const file = srtFileInput.files[0];
-    if (!file) return;
+fileUploadButton.addEventListener('click', () => {
+    srtFileInput.click();
+});
+
+async function loadSubtitleFile(file) {
+    if (!file || !file.name.toLowerCase().endsWith('.srt')) return;
+
+    srtTitle.textContent = file.name;
 
     const text = await file.text();
     player.loadFromText(text);
+}
+
+let dragCounter = 0;
+
+['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    window.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+    });
+});
+
+window.addEventListener('dragenter', (e) => {
+    if (!e.dataTransfer?.types.includes('Files')) return;
+
+    dragCounter++;
+    document.body.classList.add('dragging');
+});
+
+window.addEventListener('dragleave', (e) => {
+    if (!e.dataTransfer?.types.includes('Files')) return;
+
+    dragCounter--;
+
+    if (dragCounter <= 0) {
+        dragCounter = 0;
+        document.body.classList.remove('dragging');
+    }
+});
+
+window.addEventListener('drop', async (e) => {
+    dragCounter = 0;
+    document.body.classList.remove('dragging');
+
+    const file = e.dataTransfer.files[0];
+    await loadSubtitleFile(file);
+});
+
+srtFileInput.addEventListener('change', async (e) => {
+    await loadSubtitleFile(e.target.files[0]);
 });
 //#endregion
 

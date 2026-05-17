@@ -9,7 +9,7 @@
 <body>
   <div id="MainLabel">Upload a .SRT file to get started</div>
 
-  <details id="menu" closed>
+  <details id="menu">
   <summary>Settings (H to Hide)</summary>
   <div id="controls">
     <div id="tabs">
@@ -67,6 +67,21 @@
         Background Color
         <input id="bgColorInput" type="color" value="#1e1e1e" />
       </div>
+
+      <div class="setting">
+        Background Image
+        <input id="bgImageInput" type="file" accept="image/*" />
+      </div>
+
+      <div class="setting">
+        Image Mode
+        <select id="bgImageMode">
+          <option value="stretch">Stretch</option>
+          <option value="tile">Tile</option>
+        </select>
+      </div>
+
+      <button id="clearBgImage">Clear Image</button>
     </div>
 
   <!-- MARK: Media -->
@@ -97,12 +112,12 @@
           <button id="forwardFast">&gt;&gt;</button>
         </div>
       </div>
-      
-    <!-- MARK: Themes -->
-      <div class="tab-content" id="tab-themes" style="display:none;">
-      
-      </div>
     </div>
+  <!-- MARK: Themes -->
+    <div class="tab-content" id="tab-themes" style="display:none;">
+    
+    </div>
+  </div>
   </details>
 
   <script type="module" src="./src/main.js"></script>

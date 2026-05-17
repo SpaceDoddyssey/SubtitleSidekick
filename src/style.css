@@ -28,6 +28,10 @@ body {
     overflow: hidden;
 }
 
+.hidden {
+    display: none !important;
+}
+
 #menu summary {
     cursor: pointer;
     padding: 12px 16px;

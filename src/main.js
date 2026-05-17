@@ -126,6 +126,44 @@ bindSyncedInputs(sizeInput, sizeBox, value => {
 
 colorInput.addEventListener('input', () => mainLabel.style.color = colorInput.value);
 bgColorInput.addEventListener('input', () => document.body.style.backgroundColor = bgColorInput.value );
+
+const bgImageInput = document.getElementById('bgImageInput');
+const bgImageMode = document.getElementById('bgImageMode');
+const clearBgImage = document.getElementById('clearBgImage');
+
+bgImageInput.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+        document.body.style.backgroundImage = `url(${reader.result})`;
+        applyBackgroundMode();
+    };
+    reader.readAsDataURL(file);
+});
+
+bgImageMode.addEventListener('change', applyBackgroundMode);
+
+function applyBackgroundMode() {
+    const mode = bgImageMode.value;
+
+    if (!document.body.style.backgroundImage) return;
+
+    if (mode === 'tile') {
+        document.body.style.backgroundRepeat = 'repeat';
+        document.body.style.backgroundSize = 'auto';
+        document.body.style.backgroundPosition = 'top left';
+    } else {
+        document.body.style.backgroundRepeat = 'no-repeat';
+        document.body.style.backgroundSize = 'cover';
+        document.body.style.backgroundPosition = 'center center';
+    }
+}
+
+clearBgImage.addEventListener('click', () => {
+    document.body.style.backgroundImage = 'none';
+});
 //#endregion
 
 //#region File Upload
@@ -167,15 +205,10 @@ const forwardSlowBtn = document.getElementById('forwardSlow');
 const forwardFastBtn = document.getElementById('forwardFast');
 
 let scrubAmount = 0;
-rewindFastBtn.addEventListener('touchstart', () => scrubAmount = -50 );
-rewindSlowBtn.addEventListener('touchstart', () => scrubAmount = -10 );
-forwardSlowBtn.addEventListener('touchstart', () => scrubAmount = 10 );
-forwardFastBtn.addEventListener('touchstart', () => scrubAmount = 50 );
 rewindFastBtn.addEventListener ('pointerdown', () => scrubAmount = -50 );
 rewindSlowBtn.addEventListener ('pointerdown', () => scrubAmount = -10 );
 forwardSlowBtn.addEventListener('pointerdown', () => scrubAmount = 10 );
 forwardFastBtn.addEventListener('pointerdown', () => scrubAmount = 50 );
-document.addEventListener('touchend', () => scrubAmount = 0);
 document.addEventListener('pointerup', () => scrubAmount = 0);
 
 function animate() {
@@ -264,7 +297,7 @@ document.addEventListener('keydown', (e) => {
 
     if (e.key === 'h') {
         e.preventDefault();
-        menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        menu.classList.toggle('hidden');
     }
 
     if (e.key === 'ArrowLeft') {

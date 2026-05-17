@@ -7,20 +7,48 @@
   <link rel="stylesheet" href="src/style.css">
 </head>
 <body>
-  <div id="MainLabel">Upload a .SRT file to get started</div>
+  <div id="MainLabel">Upload a .SRT file in the menu!</div>
 
   <details id="menu">
-  <summary>Settings (H to Hide)</summary>
+  <summary>Menu (H to Hide)</summary>
   <div id="controls">
     <div id="tabs">
-      <button class="tab active" data-tab="text">Text</button>
+      <button class="tab active" data-tab="media">Media</button>
+      <button class="tab" data-tab="text">Text</button>
       <button class="tab" data-tab="background">Background</button>
-      <button class="tab" data-tab="media">Media</button>
       <button class="tab" data-tab="themes">Themes</button>
     </div>
+  <!-- MARK: Media -->
+    <div class="tab-content" id="tab-media">
+      <div class="setting">
+        SRT File
+        <input id="SRTfileInput" type="file" accept=".srt">
+      </div>
 
+      <div class="setting">
+        Playback
+        <div class="inline-control">
+          <button id="playBtn">Play</button>
+          <button id="pauseBtn">Pause</button>
+          <button id="resetBtn">Reset</button>
+        </div>
+        <span id="timeStamp">00:00:00</span>
+      </div>
+
+      <div class="setting">
+        Calibration
+        <div id="progressBar" class="progress-bar"></div>
+        
+        <div id="playback-controls">
+          <button id="rewindFast">&lt;&lt;</button>
+          <button id="rewindSlow">&lt;</button>
+          <button id="forwardSlow">&gt;</button>
+          <button id="forwardFast">&gt;&gt;</button>
+        </div>
+      </div>
+    </div>
   <!-- MARK: Text -->
-    <div class="tab-content" id="tab-text">
+    <div class="tab-content" id="tab-text" style="display:none;">
       <div class="setting">
         Sample Text
         <input id="textInput" type="text" value="" />
@@ -84,35 +112,6 @@
       <button id="clearBgImage">Clear Image</button>
     </div>
 
-  <!-- MARK: Media -->
-    <div class="tab-content" id="tab-media" style="display:none;">
-      <div class="setting">
-        SRT File
-        <input id="SRTfileInput" type="file" accept=".srt">
-      </div>
-
-      <div class="setting">
-        Playback
-        <div class="inline-control">
-          <button id="playBtn">Play</button>
-          <button id="pauseBtn">Pause</button>
-          <button id="resetBtn">Reset</button>
-        </div>
-        <span id="timeStamp">00:00:00</span>
-      </div>
-
-      <div class="setting">
-        Calibration
-        <div id="progressBar" class="progress-bar"></div>
-        
-        <div id="playback-controls">
-          <button id="rewindFast">&lt;&lt;</button>
-          <button id="rewindSlow">&lt;</button>
-          <button id="forwardSlow">&gt;</button>
-          <button id="forwardFast">&gt;&gt;</button>
-        </div>
-      </div>
-    </div>
   <!-- MARK: Themes -->
     <div class="tab-content" id="tab-themes" style="display:none;">
       <div class="setting">

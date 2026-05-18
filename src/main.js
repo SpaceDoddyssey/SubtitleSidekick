@@ -36,7 +36,7 @@ function initSettingsFromCSS() {
     const bodyStyle = getComputedStyle(document.body);
 
     const base = {
-        text: mainLabel.textContent,
+        text: "Upload a .SRT file to get started!",
         fontSize: parseInt(mainStyle.fontSize),
         textColor: rgbToHex(mainStyle.color),
         bgColor: rgbToHex(bodyStyle.backgroundColor),
@@ -361,6 +361,26 @@ function formatTime(ms) {
         seconds.toString().padStart(2, '0')
     ].join(':');
 }
+
+let fontDb;
+
+function initFontDB() {
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open('SecondScreenSubsDB', 1);
+
+        request.onupgradeneeded = () => {
+            const db = request.result;
+            db.createObjectStore('fonts');
+        };
+
+        request.onsuccess = () => {
+            fontDb = request.result;
+            resolve();
+        };
+
+        request.onerror = () => reject(request.error);
+    });
+}
 //#endregion
 
 //#region Playback Controls
@@ -415,7 +435,7 @@ function initFontPresets() {
     });
 
     applyBtn.addEventListener("click", () => {
-        CurSettings.fontFamily = fontSelect.value;
+        CurSettings.fontFamily = fontSelect.value || 'system-ui';
         applySettings();
         saveSettings();
     });
@@ -426,32 +446,70 @@ initFontPresets();
 
 let customFontCounter = 0;
 
-fontFileInput.addEventListener("change", async (e) => {
+fontFileInput.addEventListener('change', async (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    const fontName = `custom_font_${customFontCounter++}`;
-    const arrayBuffer = await file.arrayBuffer();
-    const font = new FontFace(fontName, arrayBuffer);
+    const tx = fontDb.transaction('fonts', 'readwrite');
+    const store = tx.objectStore('fonts');
 
-    try {
-        await font.load();
-        document.fonts.add(font);
+    await new Promise((resolve, reject) => {
+        const req = store.put(file, 'customFont');
+        req.onsuccess = () => resolve();
+        req.onerror = () => reject(req.error);
+    });
 
-        const opt = document.createElement("option");
-        opt.value = fontName;
-        opt.textContent = file.name.replace(/\.(ttf|otf)$/i, "");
+    CurSettings.customFontName = file.name;
+    saveSettings();
+
+    applyFontFromFile(file);
+});
+
+async function loadSavedFont() {
+    const tx = fontDb.transaction('fonts', 'readonly');
+    const store = tx.objectStore('fonts');
+
+    const file = await new Promise((resolve, reject) => {
+        const req = store.get('customFont');
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => reject(req.error);
+    });
+
+    if (file) {
+        applyFontFromFile(file);
+    }
+}
+
+async function applyFontFromFile(file) {
+    const fontUrl = URL.createObjectURL(file);
+
+    const font = new FontFace('UploadedFont', `url(${fontUrl})`);
+    await font.load();
+
+    document.fonts.add(font);
+
+    // Add custom option once if missing
+    let existing = [...fontSelect.options].find(o => o.value === 'UploadedFont');
+
+    if (!existing) {
+        const opt = document.createElement('option');
+        opt.value = 'UploadedFont';
+        opt.textContent = file.name;
         fontSelect.appendChild(opt);
-
-        fontSelect.value = fontName;
-        preview.style.fontFamily = fontName;
-
-    } catch (err) {
-        console.error("Font load failed:", err);
     }
 
-    e.target.value = "";
-});
+    // Update preview only
+    fontSelect.value = 'UploadedFont';
+    preview.style.fontFamily = 'UploadedFont';
+}
+
+async function clearSavedFont() {
+    const tx = fontDb.transaction('fonts', 'readwrite');
+    tx.objectStore('fonts').delete('customFont');
+
+    delete CurSettings.customFontName;
+    saveSettings();
+}
 //#endregion
 
 //#region Theme Presets
@@ -579,5 +637,19 @@ document.addEventListener('keyup', (e) => {
 });
 //#endregion
 
-loadSettings();
-renderThemes();
+async function init() {
+    mainLabel.style.visibility = 'hidden';
+
+    await initFontDB();
+    await loadSavedFont();
+    loadSettings();
+    renderThemes();
+
+requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+        mainLabel.style.visibility = 'visible';
+    });
+});
+}
+
+init();

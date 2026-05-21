@@ -1,5 +1,6 @@
 import { SRTPlayer } from './SRTParser.js';
 import { renderThemes } from './themes.js';
+import { initFontDB, loadSavedFonts, fontPreview, fontSelect } from './fonts.js';
 
 //#region DOM Elements
 const mainLabel = document.getElementById('MainLabel');
@@ -79,7 +80,7 @@ export function applySettings() {
 
     if (fontSelect) {
         fontSelect.value = CurSettings.fontFamily;
-        preview.style.fontFamily = CurSettings.fontFamily;
+        fontPreview.style.fontFamily = CurSettings.fontFamily;
     }
 }
 
@@ -287,12 +288,9 @@ clearBgImage.addEventListener('click', () => {
 
 //#region File Upload
 const srtFileInput = document.getElementById('SRTfileInput');
-const fontFileInput = document.getElementById('fontFileInput');
 const fileUploadButton = document.getElementById('fileUploadButton');
-const fontFileUploadButton = document.getElementById('fontUploadButton')
 
 fileUploadButton.addEventListener('click', () => { srtFileInput.click(); });
-fontFileUploadButton.addEventListener('click', () => { fontFileInput.click(); });
 
 async function loadSubtitleFile(file) {
     if (!file || !file.name.toLowerCase().endsWith('.srt')) return;
@@ -357,26 +355,6 @@ function formatTime(ms) {
         seconds.toString().padStart(2, '0')
     ].join(':');
 }
-
-let fontDb;
-
-function initFontDB() {
-    return new Promise((resolve, reject) => {
-        const request = indexedDB.open('SecondScreenSubsDB', 1);
-
-        request.onupgradeneeded = () => {
-            const db = request.result;
-            db.createObjectStore('fonts');
-        };
-
-        request.onsuccess = () => {
-            fontDb = request.result;
-            resolve();
-        };
-
-        request.onerror = () => reject(request.error);
-    });
-}
 //#endregion
 
 //#region Playback Controls
@@ -401,111 +379,6 @@ function animate() {
     window.requestAnimationFrame(animate);
 }
 animate();
-//#endregion
-
-//#region Font Presets
-const presetFonts = [
-    { name: "System", value: "system-ui" },
-    { name: "Arial", value: "Arial, sans-serif" },
-    { name: "Georgia", value: "Georgia, serif" },
-    { name: "Courier", value: "Courier New, monospace" },
-    { name: "Comic Sans", value: "'Comic Sans MS', cursive, sans-serif" },
-    { name: "Impact", value: "Impact, Charcoal, sans-serif" },
-    { name: "Verdana", value: "Verdana, Geneva, sans-serif" }
-];
-
-const fontSelect = document.getElementById("fontSelect");
-const preview = document.getElementById("textPreview");
-const applyBtn = document.getElementById("applyFont");
-
-function initFontPresets() {
-    presetFonts.forEach(font => {
-        const opt = document.createElement("option");
-        opt.value = font.value;
-        opt.textContent = font.name;
-        fontSelect.appendChild(opt);
-    });
-
-    fontSelect.addEventListener("change", () => {
-        preview.style.fontFamily = fontSelect.value;
-    });
-
-    applyBtn.addEventListener("click", () => {
-        CurSettings.fontFamily = fontSelect.value || 'system-ui';
-        applySettings();
-        saveSettings();
-    });
-
-    preview.style.fontFamily = presetFonts[0].value;
-}
-initFontPresets();
-
-let customFontCounter = 0;
-
-fontFileInput.addEventListener('change', async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const tx = fontDb.transaction('fonts', 'readwrite');
-    const store = tx.objectStore('fonts');
-
-    await new Promise((resolve, reject) => {
-        const req = store.put(file, 'customFont');
-        req.onsuccess = () => resolve();
-        req.onerror = () => reject(req.error);
-    });
-
-    CurSettings.customFontName = file.name;
-    saveSettings();
-
-    applyFontFromFile(file);
-});
-
-async function loadSavedFont() {
-    const tx = fontDb.transaction('fonts', 'readonly');
-    const store = tx.objectStore('fonts');
-
-    const file = await new Promise((resolve, reject) => {
-        const req = store.get('customFont');
-        req.onsuccess = () => resolve(req.result);
-        req.onerror = () => reject(req.error);
-    });
-
-    if (file) {
-        applyFontFromFile(file);
-    }
-}
-
-async function applyFontFromFile(file) {
-    const fontUrl = URL.createObjectURL(file);
-
-    const font = new FontFace('UploadedFont', `url(${fontUrl})`);
-    await font.load();
-
-    document.fonts.add(font);
-
-    // Add custom option once if missing
-    let existing = [...fontSelect.options].find(o => o.value === 'UploadedFont');
-
-    if (!existing) {
-        const opt = document.createElement('option');
-        opt.value = 'UploadedFont';
-        opt.textContent = file.name;
-        fontSelect.appendChild(opt);
-    }
-
-    // Update preview only
-    fontSelect.value = 'UploadedFont';
-    preview.style.fontFamily = 'UploadedFont';
-}
-
-async function clearSavedFont() {
-    const tx = fontDb.transaction('fonts', 'readwrite');
-    tx.objectStore('fonts').delete('customFont');
-
-    delete CurSettings.customFontName;
-    saveSettings();
-}
 //#endregion
 
 //#region Keyboard Shortcuts
@@ -546,7 +419,7 @@ async function init() {
     mainLabel.style.visibility = 'hidden';
 
     await initFontDB();
-    await loadSavedFont();
+    await loadSavedFonts();
     loadSettings();
     renderThemes();
 

@@ -24,7 +24,7 @@ resetThemeBtn.addEventListener('click', () => {
     saveSettings();
 });
 
-export function getThemes() {
+function getThemes() {
     try {
         return JSON.parse(localStorage.getItem(THEMES_KEY)) || {};
     } catch {
@@ -32,25 +32,25 @@ export function getThemes() {
     }
 }
 
-export function saveThemes(themes) {
+function saveThemes(themes) {
     localStorage.setItem(THEMES_KEY, JSON.stringify(themes));
 }
 
-export function exportCurrentTheme(name) {
+function exportCurrentTheme(name) {
     const themes = getThemes();
     themes[name] = structuredClone(CurSettings);
     saveThemes(themes);
     renderThemes();
 }
 
-export function deleteTheme(name) {
+function deleteTheme(name) {
     const themes = getThemes();
     delete themes[name];
     saveThemes(themes);
     renderThemes();
 }
 
-export function loadTheme(name) {
+function loadTheme(name) {
     const themes = getThemes();
     if (!themes[name]) return;
 

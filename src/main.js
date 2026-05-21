@@ -1,4 +1,5 @@
 import { SRTPlayer } from './SRTParser.js';
+import { renderThemes } from './themes.js';
 
 //#region DOM Elements
 const mainLabel = document.getElementById('MainLabel');
@@ -18,18 +19,13 @@ const playBtn = document.getElementById('playBtn');
 const pauseBtn = document.getElementById('pauseBtn');
 const resetBtn = document.getElementById('resetBtn');
 const timeStamp = document.getElementById('timeStamp');
-
-const themeNameInput = document.getElementById('themeNameInput');
-const saveThemeBtn = document.getElementById('saveThemeBtn');
-const resetThemeBtn = document.getElementById('resetThemeBtn');
 //#endregion
 
 //#region Settings State
-const SETTINGS_KEY = 'SSS-settings';
-const THEMES_KEY = 'SSS-themes';
+export const SETTINGS_KEY = 'SSS-settings';
 
-let BaseSettings = null;
-const CurSettings = {};
+export let BaseSettings = null;
+export const CurSettings = {};
 
 function initSettingsFromCSS() {
     const mainStyle = getComputedStyle(mainLabel);
@@ -55,7 +51,7 @@ function SetMainLabel(text) {
     mainLabel.setHTML(text, { sanitize: true, allowedTags: ['b', 'i', 'u', 'br'] });
 }
 
-function applySettings() {
+export function applySettings() {
     SetMainLabel(CurSettings.text);
     mainLabel.style.fontSize = `${CurSettings.fontSize}px`;
     mainLabel.style.color = CurSettings.textColor;
@@ -87,11 +83,11 @@ function applySettings() {
     }
 }
 
-function saveSettings() {
+export function saveSettings() {
     localStorage.setItem(SETTINGS_KEY, JSON.stringify(CurSettings));
 }
 
-function loadSettings() {
+export function loadSettings() {
     initSettingsFromCSS(); // populate defaults first
 
     const saved = localStorage.getItem(SETTINGS_KEY);
@@ -512,97 +508,6 @@ async function clearSavedFont() {
 }
 //#endregion
 
-//#region Theme Presets
-function getThemes() {
-    try {
-        return JSON.parse(localStorage.getItem(THEMES_KEY)) || {};
-    } catch {
-        return {};
-    }
-}
-
-function saveThemes(themes) {
-    localStorage.setItem(THEMES_KEY, JSON.stringify(themes));
-}
-
-function exportCurrentTheme(name) {
-    const themes = getThemes();
-    themes[name] = structuredClone(CurSettings);
-    saveThemes(themes);
-    renderThemes();
-}
-
-function deleteTheme(name) {
-    const themes = getThemes();
-    delete themes[name];
-    saveThemes(themes);
-    renderThemes();
-}
-
-function loadTheme(name) {
-    const themes = getThemes();
-    if (!themes[name]) return;
-
-    Object.assign(CurSettings, themes[name]);
-    applySettings();
-    saveSettings();
-}
-
-function renderThemes() {
-    const container = document.getElementById('themeList');
-    const themes = getThemes();
-
-    container.innerHTML = '';
-
-    Object.keys(themes).forEach(name => {
-        const row = document.createElement('div');
-        row.className = 'theme-row';
-        row.style.display = 'flex';
-        row.style.justifyContent = 'space-between';
-        row.style.marginBottom = '8px';
-        row.style.alignItems = 'center';
-
-        const label = document.createElement('span');
-        label.textContent = name;
-
-        const loadBtn = document.createElement('button');
-        loadBtn.textContent = 'Load';
-        loadBtn.onclick = () => loadTheme(name);
-
-        const deleteBtn = document.createElement('button');
-        deleteBtn.textContent = 'Delete';
-        deleteBtn.onclick = () => deleteTheme(name);
-
-        const btnGroup = document.createElement('div');
-        btnGroup.style.display = 'flex';
-        btnGroup.style.gap = '6px';
-        btnGroup.append(loadBtn, deleteBtn);
-
-        row.append(label, btnGroup);
-        container.appendChild(row);
-    });
-}
-
-saveThemeBtn.addEventListener('click', () => {
-    const name = themeNameInput.value.trim();
-    if (!name) return;
-
-    exportCurrentTheme(name);
-    themeNameInput.value = '';
-});
-
-resetThemeBtn.addEventListener('click', () => {
-    if (!BaseSettings) return;
-
-    Object.assign(CurSettings, structuredClone(BaseSettings));
-
-    localStorage.removeItem(SETTINGS_KEY);
-
-    applySettings();
-    saveSettings();
-});
-//endregion
-
 //#region Keyboard Shortcuts
 document.addEventListener('keydown', (e) => {
     if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') return;
@@ -645,11 +550,11 @@ async function init() {
     loadSettings();
     renderThemes();
 
-requestAnimationFrame(() => {
     requestAnimationFrame(() => {
-        mainLabel.style.visibility = 'visible';
+        requestAnimationFrame(() => {
+            mainLabel.style.visibility = 'visible';
+        });
     });
-});
 }
 
 init();

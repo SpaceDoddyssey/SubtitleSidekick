@@ -51,7 +51,7 @@ body.dragging::after {
     color: #888888;
     display: block;
     max-width: 100%;
-    overflow: wrap;
+    overflow-wrap: anywhere;
 
     text-align: left;
 }
@@ -141,6 +141,47 @@ label {
 input, select {
     width: 100%;
 }
+
+input,
+select,
+button {
+    font: inherit;
+    border-radius: 4px;
+    margin: 1px;
+    box-sizing: border-box;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .desktop-only {
+    display: none;
+  }
+}
+
+input[type="range"] {
+    appearance: none;
+    -webkit-appearance: none;
+
+    height: 6px;
+    padding: 0;
+    background: #444;
+    border: none;
+    border-radius: 999px;
+
+    cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+
+    background: #FF8C00;
+    border: none;
+
+}
+
 
 .font-preview {
     text-align: center;

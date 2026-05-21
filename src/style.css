@@ -37,8 +37,8 @@ body.dragging::after {
 #menu {
     position: fixed;
     display: block;
-    top: 16px;
-    right: 16px;
+    top: 10px;
+    right: 10px;
     background: #2a2a2a;
     border-radius: 6px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.25);
@@ -81,7 +81,44 @@ body.dragging::after {
 }
 
 #tabs {
-    margin-bottom: 1rem;
+    display: flex;
+    gap: 6px;
+
+    background: #252525;
+
+    width: calc(100%);
+    
+    padding: 6px 10px;
+    box-sizing: border-box;
+    border-top: 1px solid #333;
+    border-bottom: 1px solid #333;
+}
+
+.tab {
+    flex: 1;
+    padding: 6px 10px;
+    font-size: 13px;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: #bbbbbb;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.tab.active {
+    position: relative;
+}
+
+.tab.active::after {
+    content: "";
+    position: absolute;
+    bottom: 2px;
+    left: 10px;
+    right: 10px;
+    height: 2px;
+    background: #FF8C00;
+    border-radius: 2px;
 }
 
 .inline-control {

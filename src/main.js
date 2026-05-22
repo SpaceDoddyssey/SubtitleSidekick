@@ -20,6 +20,19 @@ const playBtn = document.getElementById('playBtn');
 const pauseBtn = document.getElementById('pauseBtn');
 const resetBtn = document.getElementById('resetBtn');
 const timeStamp = document.getElementById('timeStamp');
+
+const progressBar = document.getElementById('progressBar');
+const rewindFastBtn = document.getElementById('rewindFast');
+const rewindSlowBtn = document.getElementById('rewindSlow');
+const forwardSlowBtn = document.getElementById('forwardSlow');
+const forwardFastBtn = document.getElementById('forwardFast');
+
+const bgImageInput = document.getElementById('bgImageInput');
+const bgImageMode = document.getElementById('bgImageMode');
+const clearBgImage = document.getElementById('clearBgImage');
+
+const srtFileInput = document.getElementById('SRTfileInput');
+const fileUploadButton = document.getElementById('fileUploadButton');
 //#endregion
 
 //#region Settings State
@@ -103,6 +116,8 @@ export function loadSettings() {
 
     applySettings();
 }
+
+function applyAndSaveSettings() { applySettings(); saveSettings(); }
 //#endregion
 
 //#region Utility Functions
@@ -130,7 +145,6 @@ function rgbToHex(rgb) {
 //#endregion
 
 //#region SRT Player
-const progressBar = document.getElementById('progressBar');
 let lastWasBetween = null;
 
 const player = new SRTPlayer(
@@ -212,37 +226,28 @@ tabs.forEach(tab => {
 
 textInput.addEventListener('input', () => {
     CurSettings.text = textInput.value;
-    applySettings();
-    saveSettings();
+    applyAndSaveSettings();
 });
 
 bindSyncedInputs(sizeInput, sizeBox, value => {
     CurSettings.fontSize = Number(value);
-    applySettings();
-    saveSettings();
+    applyAndSaveSettings();
 });
 
 colorInput.addEventListener('input', () => {
     CurSettings.textColor = colorInput.value;
-    applySettings();
-    saveSettings();
+    applyAndSaveSettings();
 });
 
 bgColorInput.addEventListener('input', () => {
     CurSettings.bgColor = bgColorInput.value;
-    applySettings();
-    saveSettings();
+    applyAndSaveSettings();
 });
 
 weightInput.addEventListener('input', () => {
     CurSettings.fontWeight = weightInput.value;
-    applySettings();
-    saveSettings();
+    applyAndSaveSettings();
 });
-
-const bgImageInput = document.getElementById('bgImageInput');
-const bgImageMode = document.getElementById('bgImageMode');
-const clearBgImage = document.getElementById('clearBgImage');
 
 bgImageInput.addEventListener('change', (e) => {
     const file = e.target.files[0];
@@ -251,16 +256,14 @@ bgImageInput.addEventListener('change', (e) => {
     const reader = new FileReader();
     reader.onload = () => {
         CurSettings.bgImage = reader.result;
-        applySettings();
-        saveSettings();
+        applyAndSaveSettings();
     };
     reader.readAsDataURL(file);
 });
 
 bgImageMode.addEventListener('change', () => {
     CurSettings.bgImageMode = bgImageMode.value;
-    applySettings();
-    saveSettings();
+    applyAndSaveSettings();
 });
 
 function applyBackgroundMode() {
@@ -281,15 +284,11 @@ function applyBackgroundMode() {
 
 clearBgImage.addEventListener('click', () => {
     CurSettings.bgImage = null;
-    applySettings();
-    saveSettings();
+    applyAndSaveSettings();
 });
 //#endregion
 
 //#region File Upload
-const srtFileInput = document.getElementById('SRTfileInput');
-const fileUploadButton = document.getElementById('fileUploadButton');
-
 fileUploadButton.addEventListener('click', () => { srtFileInput.click(); });
 
 async function loadSubtitleFile(file) {
@@ -361,11 +360,6 @@ function formatTime(ms) {
 playBtn.addEventListener('click', () => player.play());
 pauseBtn.addEventListener('click', () => player.pause());
 resetBtn.addEventListener('click', () => player.reset());
-
-const rewindFastBtn = document.getElementById('rewindFast');
-const rewindSlowBtn = document.getElementById('rewindSlow');
-const forwardSlowBtn = document.getElementById('forwardSlow');
-const forwardFastBtn = document.getElementById('forwardFast');
 
 let scrubAmount = 0;
 rewindFastBtn.addEventListener('pointerdown', () => scrubAmount = -50);

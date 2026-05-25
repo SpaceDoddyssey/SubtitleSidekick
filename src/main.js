@@ -40,6 +40,7 @@ export const SETTINGS_KEY = 'SSS-settings';
 
 export let BaseSettings = null;
 export const CurSettings = {};
+let fullScreenMode = false;
 
 function initSettingsFromCSS() {
     const mainStyle = getComputedStyle(mainLabel);
@@ -141,6 +142,16 @@ function rgbToHex(rgb) {
         .slice(0, 3)
         .map(v => Number(v).toString(16).padStart(2, '0'))
         .join('');
+}
+
+function toggleFullscreen(){
+    if(!fullScreenMode) {
+        fullScreenMode = true;
+        document.documentElement.requestFullscreen();
+    } else {
+        fullScreenMode = false;
+        document.exitFullscreen();
+    }
 }
 //#endregion
 
@@ -248,7 +259,9 @@ weightInput.addEventListener('input', () => {
     CurSettings.fontWeight = weightInput.value;
     applyAndSaveSettings();
 });
+//#endregion
 
+//#region Background
 bgImageInput.addEventListener('change', (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -399,6 +412,11 @@ document.addEventListener('keydown', (e) => {
     if (e.key === ' ') {
         e.preventDefault();
         player.toggle();
+    }
+
+    if (e.key === 'f') {
+        e.preventDefault();
+        toggleFullscreen();
     }
 });
 

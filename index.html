@@ -10,12 +10,13 @@
 <body>
   <div id="MainLabel"></div>
 
-  <details id="menu">
+  <details id="menu" open>
   <summary>
     Menu <span class="desktop-only">(H to Hide)</span>
   </summary>
   <div id="tabs">
-    <button class="tab active" data-tab="media">Media</button>
+    <button class="tab active" data-tab="info">Info</button>
+    <button class="tab" data-tab="media">Media</button>
     <button class="tab" data-tab="text">Text</button>
     <button class="tab" data-tab="background">Background</button>
     <button class="tab" data-tab="themes">Themes</button>
@@ -23,7 +24,7 @@
 
   <div id="controls">
   <!-- MARK: Media -->
-    <div class="tab-content" id="tab-media">
+    <div class="tab-content" id="tab-media" style="display:none;">
       <div class="setting">
           SRT File<br>
           <span id="srtTitle">(None currently loaded)</span>
@@ -139,6 +140,51 @@
 
     </div>
 
+  <!-- MARK: Info -->
+    <div class="tab-content" id="tab-info">
+      <h2>Subtitle Sidekick</h2>
+      Keep subtitles in sight, without letting them get in the way of the movie!
+      <div style="margin-bottom: 10px;"> </div>
+      
+      <hr>
+      <h3>How To Use</h3>
+      <ol>
+        <li>Upload a <strong>.SRT</strong> file in the Media tab, or drag the file onto the page.</li>
+        <li>Place your laptop near your TV or viewing area.</li>
+        <li>Start the movie and press <strong>Play</strong>.</li>
+        <li>Use controls in the Media tab to synchronize</li>
+      </ol>
+
+      <hr>
+      <h3>Hotkeys</h3>
+      <div class="hotkey-list">
+        <div class="hotkey-row">
+          <kbd>Space</kbd>
+          <span>Play / Pause</span>
+        </div>
+
+        <div class="hotkey-row">
+          <kbd>Left/Right</kbd>
+          <span>Adjust offset</span>
+        </div>
+
+        <div class="hotkey-row">
+          <kbd>F</kbd>
+          <span>Toggle fullscreen</span>
+        </div>
+
+        <div class="hotkey-row">
+          <kbd>H</kbd>
+          <span>Show / hide menu</span>
+        </div>
+      </div>
+
+      <hr>
+      <h3>About</h3>
+      This is a hobby project by a movie geek trying to improve movie nights. 
+      I'm primarily a game dev, so please be understanding of weird web design choices. 
+      If you find any bugs or have suggestions for improvements, contact me through the psychic plane (Will add contact info later).
+    </div>
   </div>
   </details>
 

@@ -8,6 +8,8 @@ const mainLabel = document.getElementById('MainLabel');
 const menu = document.getElementById('menu');
 const srtTitle = document.getElementById('srtTitle');
 const textInput = document.getElementById('textInput');
+const yPosSlider = document.getElementById('yPosSlider')
+const yPosBox = document.getElementById('yPosBox')
 const sizeInput = document.getElementById('sizeInput');
 const colorInput = document.getElementById('textColorInput');
 const bgColorInput = document.getElementById('bgColorInput');
@@ -55,7 +57,8 @@ function initSettingsFromCSS() {
         fontWeight: mainStyle.fontWeight,
         fontFamily: mainStyle.fontFamily,
         bgImage: null,
-        bgImageMode: 'stretch'
+        bgImageMode: 'stretch',
+        textYPos: 50,
     };
 
     BaseSettings = structuredClone(base);
@@ -73,6 +76,11 @@ export function applySettings() {
     mainLabel.style.color = CurSettings.textColor;
     mainLabel.style.fontWeight = CurSettings.fontWeight;
     mainLabel.style.fontFamily = CurSettings.fontFamily;
+    
+    const yPosPercentage = (100 - CurSettings.textYPos) / 100;
+    mainLabel.style.top = `${yPosPercentage * 100}%`;
+    mainLabel.style.position = 'absolute';
+    mainLabel.style.transform = 'translateY(-50%)';
 
     document.body.style.backgroundColor = CurSettings.bgColor;
 
@@ -92,6 +100,8 @@ export function applySettings() {
     bgColorInput.value = CurSettings.bgColor;
     weightInput.value = CurSettings.fontWeight;
     bgImageMode.value = CurSettings.bgImageMode;
+    yPosSlider.value = CurSettings.textYPos;
+    yPosBox.value = CurSettings.textYPos;
 
     if (fontSelect) {
         fontSelect.value = CurSettings.fontFamily;
@@ -243,6 +253,11 @@ textInput.addEventListener('input', () => {
 
 bindSyncedInputs(sizeInput, sizeBox, value => {
     CurSettings.fontSize = Number(value);
+    applyAndSaveSettings();
+});
+
+bindSyncedInputs(yPosSlider, yPosBox, value => {
+    CurSettings.textYPos = Number(value);
     applyAndSaveSettings();
 });
 

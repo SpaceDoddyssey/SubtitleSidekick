@@ -21,10 +21,12 @@ const resetBtn = document.getElementById('resetBtn');
 const timeStamp = document.getElementById('timeStamp');
 
 const progressBar = document.getElementById('progressBar');
+const rewindTurboBtn = document.getElementById('rewindTurbo');
 const rewindFastBtn = document.getElementById('rewindFast');
 const rewindSlowBtn = document.getElementById('rewindSlow');
 const forwardSlowBtn = document.getElementById('forwardSlow');
 const forwardFastBtn = document.getElementById('forwardFast');
+const forwardTurboBtn = document.getElementById('forwardTurbo');
 
 const bgImageInput = document.getElementById('bgImageInput');
 const bgImageMode = document.getElementById('bgImageMode');
@@ -396,10 +398,12 @@ playBtn.addEventListener('click', () => {
 resetBtn.addEventListener('click', () => player.reset());
 
 let scrubAmount = 0;
+rewindTurboBtn.addEventListener('pointerdown', () => scrubAmount = -500);
 rewindFastBtn.addEventListener('pointerdown', () => scrubAmount = -50);
 rewindSlowBtn.addEventListener('pointerdown', () => scrubAmount = -10);
 forwardSlowBtn.addEventListener('pointerdown', () => scrubAmount = 10);
 forwardFastBtn.addEventListener('pointerdown', () => scrubAmount = 50);
+forwardTurboBtn.addEventListener('pointerdown', () => scrubAmount = 500);
 document.addEventListener('pointerup', () => scrubAmount = 0);
 
 function animate() {

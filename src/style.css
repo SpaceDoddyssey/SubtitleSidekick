@@ -155,11 +155,6 @@ button {
     box-sizing: border-box;
 }
 
-@media (hover: none) and (pointer: coarse) {
-  .desktop-only {
-    display: none;
-  }
-}
 
 input[type="range"] {
     appearance: none;

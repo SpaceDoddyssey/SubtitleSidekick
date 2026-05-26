@@ -12,7 +12,7 @@
 
   <details id="menu" open>
   <summary>
-    Menu <span class="desktop-only">(H to Hide)</span>
+    Menu
   </summary>
   <div id="tabs">
     <button class="tab active" data-tab="info">Info</button>
@@ -46,10 +46,18 @@
         <div id="progressBar" class="progress-bar"></div>
         
         <div id="playback-controls">
-          <button id="rewindFast">&lt;&lt;</button>
-          <button id="rewindSlow">&lt;</button>
-          <button id="forwardSlow">&gt;</button>
-          <button id="forwardFast">&gt;&gt;</button>
+          <div style="display: flex; justify-content: space-between;">
+            <div>
+              <button id="rewindTurbo">&lt;&lt;&lt;</button>
+              <button id="rewindFast">&lt;&lt;</button>
+              <button id="rewindSlow">&lt;</button>
+            </div>
+            <div>
+              <button id="forwardSlow">&gt;</button>
+              <button id="forwardFast">&gt;&gt;</button>
+              <button id="forwardTurbo">&gt;&gt;&gt;</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

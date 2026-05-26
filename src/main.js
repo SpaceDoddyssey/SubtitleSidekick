@@ -1,6 +1,6 @@
 import { SRTPlayer } from './SRTParser.js';
 import { renderThemes } from './themes.js';
-import { initFontDB, loadSavedFonts, fontPreview, fontSelect } from './fonts.js';
+import { initIndexedDB, loadSavedFonts, fontPreview, fontSelect } from './fonts.js';
 
 //#region DOM Elements
 const mainLabel = document.getElementById('MainLabel');
@@ -17,7 +17,6 @@ const tabs = document.querySelectorAll('.tab');
 const tabContents = document.querySelectorAll('.tab-content');
 
 const playBtn = document.getElementById('playBtn');
-const pauseBtn = document.getElementById('pauseBtn');
 const resetBtn = document.getElementById('resetBtn');
 const timeStamp = document.getElementById('timeStamp');
 
@@ -310,7 +309,27 @@ async function loadSubtitleFile(file) {
     srtTitle.textContent = file.name;
 
     const text = await file.text();
+
+    localStorage.setItem('lastSRT', JSON.stringify({
+        name: file.name,
+        text: text
+    }));
+
     player.loadFromText(text);
+}
+
+function loadLastSRT() {
+    const saved = localStorage.getItem('lastSRT');
+    if (!saved) return;
+
+    try {
+        const { name, text } = JSON.parse(saved);
+
+        srtTitle.textContent = name;
+        player.loadFromText(text);
+    } catch (e) {
+        console.warn('Failed to load last SRT:', e);
+    }
 }
 
 let dragCounter = 0;
@@ -370,8 +389,10 @@ function formatTime(ms) {
 //#endregion
 
 //#region Playback Controls
-playBtn.addEventListener('click', () => player.play());
-pauseBtn.addEventListener('click', () => player.pause());
+playBtn.addEventListener('click', () => {
+    player.toggle();
+    playBtn.textContent = player.isPlaying ? "Pause" : "Play"; 
+});
 resetBtn.addEventListener('click', () => player.reset());
 
 let scrubAmount = 0;
@@ -412,6 +433,7 @@ document.addEventListener('keydown', (e) => {
     if (e.key === ' ') {
         e.preventDefault();
         player.toggle();
+        playBtn.textContent = player.isPlaying ? "Pause" : "Play";
     }
 
     if (e.key === 'f') {
@@ -430,7 +452,8 @@ document.addEventListener('keyup', (e) => {
 async function init() {
     mainLabel.style.visibility = 'hidden';
 
-    await initFontDB();
+    loadLastSRT();
+    await initIndexedDB();
     await loadSavedFonts();
     loadSettings();
     renderThemes();

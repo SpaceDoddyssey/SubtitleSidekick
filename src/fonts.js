@@ -24,9 +24,9 @@ let fontDb;
 
 fontFileUploadButton.addEventListener('click', () => { fontFileInput.click(); });
 
-export function initFontDB() {
+export function initIndexedDB() {
     return new Promise((resolve, reject) => {
-        const request = indexedDB.open('SecondScreenSubsDB', 3);
+        const request = indexedDB.open('SubtitleSidekickDB', 4);
 
         request.onupgradeneeded = () => {
             const db = request.result;

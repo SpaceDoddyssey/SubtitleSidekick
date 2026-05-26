@@ -50,6 +50,18 @@ body.dragging::after {
     overflow: hidden;
 }
 
+a {
+  color: #7cc7ff;
+  text-decoration: none;
+  font-weight: 500;
+  transition:
+    color 0.2s ease,
+    text-shadow 0.2s ease,
+    border-color 0.2s ease;
+    
+  border-bottom: 1px solid transparent;
+}
+
 #srtTitle {
     font-size: small;
     color: #888888;

@@ -1,11 +1,11 @@
 import { CurSettings, BaseSettings, applySettings, saveSettings, SETTINGS_KEY } from './main.js';
 
 const presetFonts = [
+    { name: "Verdana", value: "Verdana, Geneva, sans-serif" },
     { name: "System", value: "system-ui" },
     { name: "Arial", value: "Arial, sans-serif" },
     { name: "Georgia", value: "Georgia, serif" },
     { name: "Courier", value: "Courier New, monospace" },
-    { name: "Verdana", value: "Verdana, Geneva, sans-serif" },
     { name: "Tahoma", value: "Tahoma, Geneva, sans-serif" },
     { name: "Roboto", value: "Roboto, Arial, sans-serif" },
     { name: "Noto Sans", value: "Noto Sans, Arial, sans-serif" },

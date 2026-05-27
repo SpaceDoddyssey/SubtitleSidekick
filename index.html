@@ -70,24 +70,44 @@
       </div>
 
       <div class="setting">
-        Text Position
         <div class="inline-control">
+          <div style="width: 30%">Text Position</div>
           <input id="yPosSlider" type="range" min="0" max="100" value="50" style="flex:1;" />
           <input id="yPosBox" type="number" min="0" max="100" value="50" style="width:60px;" />
         </div>
       </div>
 
       <div class="setting">
-        Font Size
         <div class="inline-control">
+          <div style="width: 30%">Font Size</div>
           <input id="sizeInput" type="range" min="12" max="96" value="48" style="flex:1;" />
           <input id="sizeBox" type="number" min="12" max="999" value="48" style="width:60px;" />
         </div>
       </div>
 
       <div class="setting">
-        Font
-        <select id="fontSelect"></select>
+        <div class="inline-control">
+          <div style="width: 44%">Text Color</div>
+          <input id="textColorInput" type="color" value="#ffffff" />
+        </div>
+      </div>
+
+      <div class="setting">
+        <div class="inline-control">
+          <div style="width: 30%">Font Weight</div>
+          <select id="weightInput" style="flex:1;">
+            <!-- <option value="300">Light</option> -->
+            <option value="400" selected>Normal</option>
+            <option value="700">Bold</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="setting">
+        <div class="inline-control">
+          <div style="width: 45%">Font</div>
+          <select id="fontSelect"></select>
+        </div>
         <button id="fontUploadButton" type="button">Upload .TTF/.OTF</button>
         <input id="fontFileInput" type="file" accept=".ttf,.otf", hidden />
         <div id="textPreview" class="font-preview" contenteditable="true">
@@ -96,21 +116,6 @@
         <button id="applyFont">Apply</button>
       </div>
 
-      <div class="setting">
-        Text Color
-        <input id="textColorInput" type="color" value="#ffffff" />
-      </div>
-
-      <div class="setting">
-        Font Weight
-        <div class="inline-control">
-          <select id="weightInput" style="flex:1;">
-            <!-- <option value="300">Light</option> -->
-            <option value="400" selected>Normal</option>
-            <option value="700">Bold</option>
-          </select>
-        </div>
-      </div>
     </div>
 
   <!-- MARK: Background -->

@@ -167,6 +167,10 @@ button {
     box-sizing: border-box;
 }
 
+input[type="color"] {
+    width: 100%;
+    box-sizing: border-box;
+}
 
 input[type="range"] {
     appearance: none;

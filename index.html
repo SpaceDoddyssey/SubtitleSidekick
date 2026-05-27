@@ -26,7 +26,7 @@
 
   <div id="controls">
   <!-- MARK: Media -->
-    <div class="tab-content" id="tab-media" style="display:none;">
+    <div class="tab-content" id="tab-media">
       <div class="setting">
           SRT File<br>
           <span id="srtTitle">(None currently loaded)</span>
@@ -37,7 +37,7 @@
       <div class="setting">
         Playback
         <div class="inline-control">
-          <button id="playBtn" style="width:60px">Play</button>
+          <button id="playBtn">Play</button>
           <button id="resetBtn">Reset</button>
           <span id="timeStamp">00:00:00</span>
         </div>
@@ -48,23 +48,21 @@
         <div id="progressBar" class="progress-bar"></div>
         
         <div id="playback-controls">
-          <div style="display: flex; justify-content: space-between;">
-            <div>
-              <button id="rewindTurbo">&lt;&lt;&lt;</button>
-              <button id="rewindFast">&lt;&lt;</button>
-              <button id="rewindSlow">&lt;</button>
-            </div>
-            <div>
-              <button id="forwardSlow">&gt;</button>
-              <button id="forwardFast">&gt;&gt;</button>
-              <button id="forwardTurbo">&gt;&gt;&gt;</button>
-            </div>
+          <div>
+            <button id="rewindTurbo">&lt;&lt;&lt;</button>
+            <button id="rewindFast">&lt;&lt;</button>
+            <button id="rewindSlow">&lt;</button>
+          </div>
+          <div>
+            <button id="forwardSlow">&gt;</button>
+            <button id="forwardFast">&gt;&gt;</button>
+            <button id="forwardTurbo">&gt;&gt;&gt;</button>
           </div>
         </div>
       </div>
     </div>
   <!-- MARK: Text -->
-    <div class="tab-content" id="tab-text" style="display:none;">
+    <div class="tab-content" id="tab-text">
       <div class="setting">
         Sample Text
         <input id="textInput" type="text" value="" />
@@ -162,7 +160,7 @@
       </div>
     </div>
   <!-- MARK: Background -->
-    <div class="tab-content" id="tab-background" style="display:none;">
+    <div class="tab-content" id="tab-background">
       <div class="setting">
         Background Color
         <input id="bgColorInput" type="color" value="#1e1e1e" />
@@ -185,7 +183,7 @@
     </div>
 
   <!-- MARK: Themes -->
-    <div class="tab-content" id="tab-themes" style="display:none;">
+    <div class="tab-content" id="tab-themes">
       <div class="setting">
         Theme Name
         <input id="themeNameInput" type="text" placeholder="My Theme" />
@@ -204,10 +202,9 @@
     </div>
 
   <!-- MARK: Info -->
-    <div class="tab-content" id="tab-info">
+    <div class="tab-content" id="tab-info" style="display: block;">
       <h2>Subtitle Sidekick</h2>
       Keep subtitles in sight, without letting them get in the way of the movie!
-      <div style="margin-bottom: 10px;"> </div>
       
       <hr>
       <h3>How To Use</h3>

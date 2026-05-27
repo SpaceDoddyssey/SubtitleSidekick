@@ -1,4 +1,68 @@
 /* =========================================
+   Tabs
+========================================= */
+
+#tabs {
+    display: flex;
+    gap: 6px;
+
+    width: 100%;
+    padding: 6px 10px;
+    box-sizing: border-box;
+
+    background: #252525;
+
+    border-top: 1px solid #333;
+    border-bottom: 1px solid #333;
+}
+
+.tab {
+    flex: 1;
+
+    padding: 6px 10px;
+
+    border: 0;
+    border-radius: 6px;
+
+    background: transparent;
+
+    color: #cccccc;
+    font-size: 13px;
+
+    cursor: pointer;
+
+    transition:
+        background 0.15s ease,
+        color 0.15s ease;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.tab.active {
+    position: relative;
+}
+
+.tab.active::after {
+    content: "";
+
+    position: absolute;
+    bottom: 2px;
+    left: 10px;
+    right: 10px;
+
+    height: 2px;
+
+    background: #FF8C00;
+    border-radius: 2px;
+}
+
+/* =========================================
    Info Tab
 ========================================= */
 

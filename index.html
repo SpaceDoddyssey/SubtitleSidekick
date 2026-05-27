@@ -64,8 +64,10 @@
   <!-- MARK: Text -->
     <div class="tab-content" id="tab-text">
       <div class="setting">
-        Sample Text
+        <div class="inline-control">
+        <div class="label-mid">Default Text</div>
         <input id="textInput" type="text" value="" />
+        </div>
       </div>
 
       <div class="setting">
@@ -144,19 +146,21 @@
         <button id="fontUploadButton" type="button">
           Upload .TTF/.OTF
         </button>
-
-        <input
-          id="fontFileInput"
-          type="file"
-          accept=".ttf,.otf"
-          hidden
-        />
-
+        
+        <div class="inline-control">
+          <input
+            id="fontFileInput"
+            type="file"
+            accept=".ttf,.otf"
+            hidden
+          />
+          <button id="applyFont">Apply</button>
+        </div>
+          
         <div id="textPreview" class="font-preview" contenteditable="true">
           Font Sample
         </div>
 
-        <button id="applyFont">Apply</button>
       </div>
     </div>
   <!-- MARK: Background -->

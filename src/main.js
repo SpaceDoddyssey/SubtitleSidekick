@@ -430,7 +430,9 @@ animate();
 
 //#region Keyboard Shortcuts
 document.addEventListener('keydown', (e) => {
-    if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') return;
+    if (document.activeElement.tagName === 'INPUT' 
+        || document.activeElement.tagName === 'TEXTAREA'
+        || document.activeElement.isContentEditable) return;
     if (e.repeat) return;
 
     if (e.key === 'h') {

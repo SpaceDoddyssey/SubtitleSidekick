@@ -43,7 +43,7 @@
    Settings / Controls
 ========================================= */
 
-.setting {
+.setting:not(:last-child) {
     margin-bottom: 1rem;
 }
 

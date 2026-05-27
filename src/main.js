@@ -133,6 +133,13 @@ function applyAndSaveSettings() { applySettings(); saveSettings(); }
 //#endregion
 
 //#region Utility Functions
+function bindSetting(input, key, transform = v => v) {
+    input.addEventListener('input', () => {
+        CurSettings[key] = transform(input.value);
+        applyAndSaveSettings();
+    });
+}
+
 function bindSyncedInputs(inputA, inputB, apply) {
     inputA.addEventListener('input', () => {
         inputB.value = inputA.value;
@@ -246,11 +253,6 @@ tabs.forEach(tab => {
     });
 });
 
-textInput.addEventListener('input', () => {
-    CurSettings.text = textInput.value;
-    applyAndSaveSettings();
-});
-
 bindSyncedInputs(sizeInput, sizeBox, value => {
     CurSettings.fontSize = Number(value);
     applyAndSaveSettings();
@@ -261,20 +263,10 @@ bindSyncedInputs(yPosSlider, yPosBox, value => {
     applyAndSaveSettings();
 });
 
-colorInput.addEventListener('input', () => {
-    CurSettings.textColor = colorInput.value;
-    applyAndSaveSettings();
-});
-
-bgColorInput.addEventListener('input', () => {
-    CurSettings.bgColor = bgColorInput.value;
-    applyAndSaveSettings();
-});
-
-weightInput.addEventListener('input', () => {
-    CurSettings.fontWeight = weightInput.value;
-    applyAndSaveSettings();
-});
+bindSetting(textInput, 'text');
+bindSetting(colorInput, 'textColor');
+bindSetting(bgColorInput, 'bgColor');
+bindSetting(weightInput, 'fontWeight');
 //#endregion
 
 //#region Background
@@ -290,10 +282,7 @@ bgImageInput.addEventListener('change', (e) => {
     reader.readAsDataURL(file);
 });
 
-bgImageMode.addEventListener('change', () => {
-    CurSettings.bgImageMode = bgImageMode.value;
-    applyAndSaveSettings();
-});
+bindSetting(bgImageMode, 'bgImageMode');
 
 function applyBackgroundMode() {
     const mode = CurSettings.bgImageMode;

@@ -1,0 +1,57 @@
+/* =========================================
+   Info Tab
+========================================= */
+
+#site-title {
+    padding-top: 0;
+}
+
+#tab-info {
+    font-size: 0.9rem;
+    line-height: 1.2rem;
+}
+
+#tab-info h2 {
+    margin-top: 0.1rem;
+    margin-bottom: 0.7rem;
+}
+
+#tab-info h3 {
+    margin-top: 0.6rem;
+    margin-bottom: 0.7rem;
+}
+
+#tab-info ol {
+    margin-top: 0;
+    padding-left: 18px;
+}
+
+#tab-info hr {
+    border: none;
+    border-top: 1px solid #3a3a3a;
+    margin: 0.6rem 0;
+}
+
+/* =========================================
+   Text Tab
+========================================= */
+
+.flex-grow {
+    flex: 1;
+}
+
+.number-input-small {
+    width: 60px;
+}
+
+.label-narrow {
+    width: 30%;
+}
+
+.label-mid {
+    width: 44%;
+}
+
+.label-wide {
+    width: 45%;
+}

@@ -3,9 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Second Screen Subtitles</title>
+  <title>Subtitle Sidekick</title>
   <link rel="icon" type="image/png" href="icon.png" sizes="32x32">
   <link rel="stylesheet" href="src/css/style.css">
+  <link rel="stylesheet" href="src/css/components.css">
+  <link rel="stylesheet" href="src/css/tabs.css">
 </head>
 <body>
   <div id="MainLabel"></div>
@@ -61,7 +63,6 @@
         </div>
       </div>
     </div>
-
   <!-- MARK: Text -->
     <div class="tab-content" id="tab-text" style="display:none;">
       <div class="setting">
@@ -71,31 +72,64 @@
 
       <div class="setting">
         <div class="inline-control">
-          <div style="width: 30%">Text Position</div>
-          <input id="yPosSlider" type="range" min="0" max="100" value="50" style="flex:1;" />
-          <input id="yPosBox" type="number" min="0" max="100" value="50" style="width:60px;" />
+          <div class="label-narrow">Text Position</div>
+
+          <input
+            id="yPosSlider"
+            class="flex-grow"
+            type="range"
+            min="0"
+            max="100"
+            value="50"
+          />
+
+          <input
+            id="yPosBox"
+            class="number-input-small"
+            type="number"
+            min="0"
+            max="100"
+            value="50"
+          />
         </div>
       </div>
 
       <div class="setting">
         <div class="inline-control">
-          <div style="width: 30%">Font Size</div>
-          <input id="sizeInput" type="range" min="12" max="96" value="48" style="flex:1;" />
-          <input id="sizeBox" type="number" min="12" max="999" value="48" style="width:60px;" />
+          <div class="label-narrow">Font Size</div>
+
+          <input
+            id="sizeInput"
+            class="flex-grow"
+            type="range"
+            min="12"
+            max="96"
+            value="48"
+          />
+
+          <input
+            id="sizeBox"
+            class="number-input-small"
+            type="number"
+            min="12"
+            max="999"
+            value="48"
+          />
         </div>
       </div>
 
       <div class="setting">
         <div class="inline-control">
-          <div style="width: 44%">Text Color</div>
+          <div class="label-mid">Text Color</div>
           <input id="textColorInput" type="color" value="#ffffff" />
         </div>
       </div>
 
       <div class="setting">
         <div class="inline-control">
-          <div style="width: 30%">Font Weight</div>
-          <select id="weightInput" style="flex:1;">
+          <div class="label-narrow">Font Weight</div>
+
+          <select id="weightInput" class="flex-grow">
             <!-- <option value="300">Light</option> -->
             <option value="400" selected>Normal</option>
             <option value="700">Bold</option>
@@ -105,19 +139,28 @@
 
       <div class="setting">
         <div class="inline-control">
-          <div style="width: 45%">Font</div>
+          <div class="label-wide">Font</div>
           <select id="fontSelect"></select>
         </div>
-        <button id="fontUploadButton" type="button">Upload .TTF/.OTF</button>
-        <input id="fontFileInput" type="file" accept=".ttf,.otf", hidden />
+
+        <button id="fontUploadButton" type="button">
+          Upload .TTF/.OTF
+        </button>
+
+        <input
+          id="fontFileInput"
+          type="file"
+          accept=".ttf,.otf"
+          hidden
+        />
+
         <div id="textPreview" class="font-preview" contenteditable="true">
           Font Sample
         </div>
+
         <button id="applyFont">Apply</button>
       </div>
-
     </div>
-
   <!-- MARK: Background -->
     <div class="tab-content" id="tab-background" style="display:none;">
       <div class="setting">

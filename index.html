@@ -31,18 +31,18 @@
     Menu
   </summary>
   <div id="tabs">
-    <button class="tab active" data-tab="info">Info</button>
-    <button class="tab" data-tab="media">Media</button>
-    <button class="tab" data-tab="text">Text</button>
-    <button class="tab" data-tab="background">Background</button>
-    <button class="tab" data-tab="themes">Themes</button>
+    <button class="tab active" data-tab="info" aria-label="Info tab">Info</button>
+    <button class="tab" data-tab="media" aria-label="Media tab">Media</button>
+    <button class="tab" data-tab="text" aria-label="Text settings tab">Text</button>
+    <button class="tab" data-tab="background" aria-label="Background settings tab">Background</button>
+    <button class="tab" data-tab="themes" aria-label="Themes tab">Themes</button>
   </div>
 
   <div id="controls">
   <!-- MARK: Media -->
     <div class="tab-content" id="tab-media">
       <div class="setting">
-          SRT File<br>
+          <label for="SRTfileInput">SRT File</label><br>
           <span id="srtTitle">(None currently loaded)</span>
           <button id="fileUploadButton" type="button">Choose File</button>
           <input id="SRTfileInput" type="file" accept=".srt" hidden="hidden">
@@ -77,7 +77,9 @@
       
       <div class="setting">
         <div class="inline-control">
-          <div class="label-mid">Mobile Controls: </div>
+          <div class="label-mid"><label for="mobileControlToggle">
+            Mobile Controls:
+          </label></div>
           <button id="mobileControlToggle" class="toggle-btn">Off</button>
         </div>
       </div>

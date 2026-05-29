@@ -8,8 +8,8 @@ const mainLabel = document.getElementById('MainLabel');
 const menu = document.getElementById('menu');
 const srtTitle = document.getElementById('srtTitle');
 const textInput = document.getElementById('textInput');
-const yPosSlider = document.getElementById('yPosSlider')
-const yPosBox = document.getElementById('yPosBox')
+const yPosSlider = document.getElementById('yPosSlider');
+const yPosBox = document.getElementById('yPosBox');
 const sizeInput = document.getElementById('sizeInput');
 const colorInput = document.getElementById('textColorInput');
 const bgColorInput = document.getElementById('bgColorInput');
@@ -74,12 +74,12 @@ function initSettingsFromCSS() {
     Object.assign(CurSettings, base);
 }
 
-function SetMainLabel(text) {
+function setMainLabel(text) {
     mainLabel.setHTML(text, { sanitize: true, allowedTags: ['b', 'i', 'u', 'br'] });
 }
 
 export function applySettings() {
-    SetMainLabel(CurSettings.text);
+    setMainLabel(CurSettings.text);
     mainLabel.style.fontSize = `${CurSettings.fontSize}px`;
     mainLabel.style.color = CurSettings.textColor;
     mainLabel.style.fontWeight = CurSettings.fontWeight;
@@ -186,7 +186,7 @@ let lastWasBetween = null;
 
 const player = new SRTPlayer(
     (text) => {
-        SetMainLabel(text);
+        setMainLabel(text);
     },
     (time) => {
         timeStamp.textContent = formatTime(time);
@@ -450,7 +450,9 @@ forwardTurboBtn.addEventListener('pointerdown', () => scrubAmount = 500);
 document.addEventListener('pointerup', () => scrubAmount = 0);
 
 function animate() {
-    if (player.subtitles.length != 0) player.scrub(scrubAmount);
+    if (player.subtitles.length != 0 && scrubAmount !== 0) {
+        player.scrub(scrubAmount);
+    }
     window.requestAnimationFrame(animate);
 }
 animate();

@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Subtitle Sidekick</title>
+  <meta property="og:title" content="Subtitle Sidekick">
+  <meta property="og:description" content="Keep subtitles in sight without blocking your movie">
+  <meta property="og:type" content="website">
+  <meta name="twitter:title" content="Subtitle Sidekick">
   <link rel="icon" type="image/png" href="icon.png" sizes="32x32">
   <link rel="stylesheet" href="src/css/style.css">
   <link rel="stylesheet" href="src/css/components.css">
@@ -39,7 +43,7 @@
           SRT File<br>
           <span id="srtTitle">(None currently loaded)</span>
           <button id="fileUploadButton" type="button">Choose File</button>
-          <input id="SRTfileInput" type="file" accept=".srt" hidden>
+          <input id="SRTfileInput" type="file" accept=".srt" hidden="hidden">
       </div>
       
       <div class="setting">
@@ -81,7 +85,7 @@
       <div class="setting">
         <div class="inline-control">
         <div class="label-mid">Default Text</div>
-        <input id="textInput" type="text" value="" />
+        <input id="textInput" type="text" value="">
         </div>
       </div>
 
@@ -96,7 +100,7 @@
             min="0"
             max="100"
             value="50"
-          />
+          >
 
           <input
             id="yPosBox"
@@ -105,7 +109,7 @@
             min="0"
             max="100"
             value="50"
-          />
+          >
         </div>
       </div>
 
@@ -120,7 +124,7 @@
             min="12"
             max="96"
             value="48"
-          />
+          >
 
           <input
             id="sizeBox"
@@ -129,14 +133,14 @@
             min="12"
             max="999"
             value="48"
-          />
+          >
         </div>
       </div>
 
       <div class="setting">
         <div class="inline-control">
           <div class="label-mid">Font Color</div>
-          <input id="textColorInput" type="color" value="#ffffff" />
+          <input id="textColorInput" type="color" value="#ffffff">
         </div>
       </div>
 
@@ -168,8 +172,8 @@
             id="fontFileInput"
             type="file"
             accept=".ttf,.otf"
-            hidden
-          />
+            hidden="hidden"
+          >
           <button id="applyFont">Apply</button>
         </div>
         
@@ -183,12 +187,12 @@
     <div class="tab-content" id="tab-background">
       <div class="setting">
         Background Color
-        <input id="bgColorInput" type="color" value="#1e1e1e" />
+        <input id="bgColorInput" type="color" value="#1e1e1e">
       </div>
 
       <div class="setting">
         Background Image
-        <input id="bgImageInput" type="file" accept="image/*" />
+        <input id="bgImageInput" type="file" accept="image/*">
       </div>
 
       <div class="setting">
@@ -206,16 +210,16 @@
     <div class="tab-content" id="tab-themes">
       <div class="setting">
         Theme Name
-        <input id="themeNameInput" type="text" placeholder="My Theme" />
+        <input id="themeNameInput" type="text" placeholder="My Theme">
       </div>
 
       <button id="saveThemeBtn">Save Theme</button>
 
-      <hr />
+      <hr>
 
       <div id="themeList"></div>
 
-      <hr />
+      <hr>
 
       <button id="resetThemeBtn">Default</button>
 

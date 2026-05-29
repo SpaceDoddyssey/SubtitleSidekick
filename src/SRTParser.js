@@ -5,6 +5,7 @@ export class SRTPlayer {
         this.currentTime = 0;
         this.isPlaying = false;
         this.timer = null;
+        this.lastText = "";
         this.onSubtitleChange = onSubtitleChange;
         this.onTimeUpdate = onTimeUpdate;
     }
@@ -76,23 +77,23 @@ export class SRTPlayer {
         return this.subtitles[this.subtitles.length - 1].end;
     }
 
+    timeInRange(){
+        return this.currentTime >= subtitle.start
+               && this.currentTime <= subtitle.end;
+    }
+
     updateSubtitle() {
         if (this.subtitles.length === 0) return;
 
-        
-        while (this.currentIndex < this.subtitles.length &&
-            this.currentTime > this.subtitles[this.currentIndex].end) 
-        {
-            this.currentIndex++;
-        }
+        this.currentIndex = this.binarySearch(this.currentTime);
 
         const subtitle = this.subtitles[this.currentIndex];
 
-        if (subtitle &&
-            this.currentTime >= subtitle.start &&
-            this.currentTime <= subtitle.end) 
-        {
-            this.onSubtitleChange(subtitle.text);
+        if (subtitle && timeInRange) {
+            if (subtitle.text !== this.lastText) {
+                this.lastText = subtitle.text;
+                this.onSubtitleChange(subtitle.text);
+            }
         } else {
             this.onSubtitleChange("");
         }
@@ -120,6 +121,8 @@ export class SRTPlayer {
             .split(/\r?\n\r?\n/)
             .map(block => {
                 const lines = block.split(/\r?\n/);
+                if (!lines[1]) return null;
+                if (!lines[1].includes('-->')) return null;
                 const [start, end] = lines[1].split(' --> ');
 
                 return {
@@ -128,5 +131,20 @@ export class SRTPlayer {
                     text: lines.slice(2).join('\n')
                 };
             });
+    }
+
+    binarySearch(time) {
+        let low = 0, high = this.subtitles.length - 1;
+
+        while (low <= high) {
+            const mid = (low + high) >> 1;
+            const sub = this.subtitles[mid];
+
+            if (time < sub.start) high = mid - 1;
+            else if (time > sub.end) low = mid + 1;
+            else return mid;
+        }
+
+        return low;
     }
 }

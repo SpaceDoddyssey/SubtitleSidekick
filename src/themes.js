@@ -4,6 +4,7 @@ const THEMES_KEY = 'SSS-themes';
 const themeNameInput = document.getElementById('themeNameInput');
 const saveThemeBtn = document.getElementById('saveThemeBtn');
 const resetThemeBtn = document.getElementById('resetThemeBtn');
+const themeContainer = document.getElementById('themeList');
 
 saveThemeBtn.addEventListener('click', () => {
     const name = themeNameInput.value.trim();
@@ -60,10 +61,9 @@ function loadTheme(name) {
 }
 
 export function renderThemes() {
-    const container = document.getElementById('themeList');
     const themes = getThemes();
 
-    container.innerHTML = '';
+    themeContainer.innerHTML = '';
 
     Object.keys(themes).forEach(name => {
         const row = document.createElement('div');
@@ -90,6 +90,6 @@ export function renderThemes() {
         btnGroup.append(loadBtn, deleteBtn);
 
         row.append(label, btnGroup);
-        container.appendChild(row);
+        themeContainer.appendChild(row);
     });
 }

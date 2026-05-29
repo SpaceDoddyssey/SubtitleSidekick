@@ -146,11 +146,3 @@ async function applyFontFromFile(savedFont, selectAfterLoad = true) {
         fontPreview.style.fontFamily = id;
     }
 }
-
-async function clearSavedFont() {
-    const tx = fontDb.transaction('fonts', 'readwrite');
-    tx.objectStore('fonts').delete('customFont');
-
-    delete CurSettings.customFontName;
-    saveSettings();
-}

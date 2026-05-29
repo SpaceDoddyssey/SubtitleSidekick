@@ -10,6 +10,7 @@
     display: block;
 
     width: 400px;
+    max-width: calc(100vw - 20px);
     overflow: hidden;
 
     background: #2a2a2a;
@@ -40,7 +41,7 @@
 }
 
 /* =========================================
-   Settings / Controls
+   MARK: Settings / Controls
 ========================================= */
 
 .setting:not(:last-child) {
@@ -74,6 +75,52 @@
 
 #applyFont {
     width: 92px;
+}
+
+/* =========================================
+   Toggle Button
+========================================= */
+
+.toggle-btn {
+    padding: 8px 14px;
+
+    border: 1px solid #555;
+    border-radius: 6px;
+
+    background: #353535;
+    color: #cccccc;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.05s ease;
+}
+
+.toggle-btn:hover {
+    background: #404040;
+    border-color: #777;
+}
+
+.toggle-btn:active {
+    transform: translateY(1px);
+}
+
+.toggle-btn.active {
+    background: #777;
+    border-color: #444;
+    color: white;
+}
+
+.toggle-btn:focus-visible {
+    outline: 2px solid #7cc7ff;
+    outline-offset: 2px;
 }
 
 /* =========================================
@@ -138,6 +185,112 @@
 
 .theme-row button {
     padding: 4px 8px;
+}
+
+/* =========================================
+   MARK: Mobile Controls
+========================================= */
+
+.mobile-controls {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    justify-content: center;
+
+    opacity: 0;
+    pointer-events: none;
+
+    transition: opacity 0.3s ease;
+}
+
+.mobile-controls.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.mobile-btn {
+    width: 50px;
+    height: 50px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(100, 100, 100, 0.4);
+    color: rgba(200, 200, 200, 0.8);
+    border: none;
+    border-radius: 12px;
+
+    font-size: 24px;
+    user-select: none;
+
+    transition:
+        background 0.2s ease,
+        transform 0.1s ease;
+}
+
+.mobile-btn:hover {
+    background: rgba(120, 120, 120, 0.5);
+}
+
+.mobile-btn:active {
+    transform: scale(0.95);
+}
+
+.mobile-btn-center {
+    width: 56px;
+    height: 56px;
+    font-size: 28px;
+    user-select: none;
+}
+
+.mobile-fullscreen-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+
+    width: 50px;
+    height: 50px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(100, 100, 100, 0.4);
+    color: rgba(200, 200, 200, 0.8);
+    border: none;
+    border-radius: 12px;
+
+    font-size: 24px;
+
+    cursor: pointer;
+
+    opacity: 0;
+    pointer-events: none;
+    user-select: none;
+
+    transition:
+        background 0.2s ease,
+        transform 0.1s ease,
+        opacity 0.3s ease;
+}
+
+.mobile-fullscreen-btn.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.mobile-fullscreen-btn:hover {
+    background: rgba(120, 120, 120, 0.8);
+}
+
+.mobile-fullscreen-btn:active {
+    transform: scale(0.95);
 }
 
 /* =========================================

@@ -36,6 +36,13 @@ const clearBgImage = document.getElementById('clearBgImage');
 
 const srtFileInput = document.getElementById('SRTfileInput');
 const fileUploadButton = document.getElementById('fileUploadButton');
+
+const mobileControlToggle = document.getElementById('mobileControlToggle');
+const mobileControls = document.getElementById('mobileControls');
+const mobilePlayBtn = document.getElementById('mobilePlayBtn');
+const mobileRewindBtn = document.getElementById('mobileRewindBtn');
+const mobileForwardBtn = document.getElementById('mobileForwardBtn');
+const mobileFullscreenBtn = document.getElementById('mobileFullscreenBtn');
 //#endregion
 
 //#region Settings State
@@ -44,6 +51,7 @@ export const SETTINGS_KEY = 'SSS-settings';
 export let BaseSettings = null;
 export const CurSettings = {};
 let fullScreenMode = false;
+let mobileControlsShowing = false;
 
 function initSettingsFromCSS() {
     const mainStyle = getComputedStyle(mainLabel);
@@ -267,6 +275,36 @@ bindSetting(textInput, 'text');
 bindSetting(colorInput, 'textColor');
 bindSetting(bgColorInput, 'bgColor');
 bindSetting(weightInput, 'fontWeight');
+
+mobileControlToggle.addEventListener("click", () => {
+    mobileControlsShowing = !mobileControlsShowing;
+
+    mobileControlToggle.classList.toggle("active", mobileControlsShowing);
+    mobileControlToggle.textContent = `${mobileControlsShowing ? "On" : "Off"}`;
+    mobileControls.classList.toggle("visible", mobileControlsShowing);
+    mobileFullscreenBtn.classList.toggle("visible", mobileControlsShowing);
+});
+
+mobilePlayBtn.addEventListener('pointerdown', () => {
+    player.toggle();
+    updateMobilePlayBtn();
+});
+
+mobileRewindBtn.addEventListener('pointerdown', () => {
+    scrubAmount = -10;
+});
+
+mobileForwardBtn.addEventListener('pointerdown', () => {
+    scrubAmount = 10;
+});
+
+mobileFullscreenBtn.addEventListener('pointerdown', () => {
+    toggleFullscreen();
+});
+
+function updateMobilePlayBtn() {
+    mobilePlayBtn.textContent = player.isPlaying ? "⏸" : "▶";
+}
 //#endregion
 
 //#region Background
@@ -397,7 +435,8 @@ function formatTime(ms) {
 //#region Playback Controls
 playBtn.addEventListener('click', () => {
     player.toggle();
-    playBtn.textContent = player.isPlaying ? "Pause" : "Play"; 
+    playBtn.textContent = player.isPlaying ? "Pause" : "Play";
+    updateMobilePlayBtn();
 });
 resetBtn.addEventListener('click', () => player.reset());
 

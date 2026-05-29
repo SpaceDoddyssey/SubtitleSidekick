@@ -118,6 +118,10 @@ select {
     width: 100%;
 }
 
+button{
+    cursor: pointer;
+}
+
 input[type="color"] {
     width: 100%;
     box-sizing: border-box;

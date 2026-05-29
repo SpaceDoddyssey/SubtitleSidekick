@@ -12,6 +12,14 @@
 <body>
   <div id="MainLabel"></div>
 
+  <div id="mobileControls" class="mobile-controls">
+    <button id="mobileRewindBtn" class="mobile-btn mobile-btn-side">&lt;</button>
+    <button id="mobilePlayBtn" class="mobile-btn mobile-btn-center">▶</button>
+    <button id="mobileForwardBtn" class="mobile-btn mobile-btn-side">&gt;</button>
+  </div>
+
+  <button id="mobileFullscreenBtn" class="mobile-fullscreen-btn">⛶</button>
+
   <details id="menu">
   <summary>
     Menu
@@ -58,6 +66,13 @@
             <button id="forwardFast">&gt;&gt;</button>
             <button id="forwardTurbo">&gt;&gt;&gt;</button>
           </div>
+        </div>
+      </div>
+      
+      <div class="setting">
+        <div class="inline-control">
+          <div class="label-mid">Mobile Controls: </div>
+          <button id="mobileControlToggle" class="toggle-btn">Off</button>
         </div>
       </div>
     </div>

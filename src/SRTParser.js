@@ -1,6 +1,7 @@
 export class SRTPlayer {
     constructor(onSubtitleChange, onTimeUpdate) {
         this.subtitles = [];
+        this.currentIndex = 0;
         this.currentTime = 0;
         this.isPlaying = false;
         this.timer = null;

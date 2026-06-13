@@ -77,8 +77,9 @@ export class SRTPlayer {
         return this.subtitles[this.subtitles.length - 1].end;
     }
 
-    timeInRange(){
-        return this.currentTime >= subtitle.start
+    timeInRange(subtitle){
+        return subtitle 
+               && this.currentTime >= subtitle.start
                && this.currentTime <= subtitle.end;
     }
 
@@ -89,7 +90,7 @@ export class SRTPlayer {
 
         const subtitle = this.subtitles[this.currentIndex];
 
-        if (subtitle && timeInRange) {
+        if (subtitle && this.timeInRange(subtitle)) {
             if (subtitle.text !== this.lastText) {
                 this.lastText = subtitle.text;
                 this.onSubtitleChange(subtitle.text);
